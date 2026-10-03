@@ -1,0 +1,118 @@
+{
+  "title": "Pilih dunia visual portofolio",
+  "question": "Roll menghasilkan OBSERVATORIUM RADIO. Buka kartunya di bawah: tetap pakai, pilih tandingan, re-roll, atau ambil jalan standar — lalu kunci jawabanmu.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Observatorium Radio / Waterfall Telemetry",
+      "kicker": "THE ROLL",
+      "lineage": "Dunia ilmu & operator teleskop radio (SETI, Jodrell Bank, Very Large Array)",
+      "thesis": "Portofolio sebagai stasiun penerima sinyal: setiap proyek adalah sinyal yang berhasil di-decoding.",
+      "palette": ["#05070d", "#0b1420", "#63d8c8", "#e8f6ef", "#1d6b5f"],
+      "materials": ["black void", "signal waterfall", "mono readout", "antenna dish"],
+      "viewport": "Layar pertama adalah waterfall telemetry yang hidup: garis sinyal berjalan vertikal seperti spektrum radio, nama & job title tercetak seperti readout instrumen, dan kursor menari seperti tuner yang melewati noise.",
+      "risk": "Wajib dijalankan sebagai instrumen yang tenang dan akurat, bukan HUD neon yang berisik.",
+      "raised": [
+        { "from": "challenger-festival", "raise": "Hierarki proyek diatur oleh kekuatan sinyal (skala), bukan dekorasi." },
+        { "from": "challenger-safelight", "raise": "Amber hangat sebagai satu-satunya sinyal manusia di dalam kegelapan." },
+        { "from": "challenger-desktop", "raise": "State aktif memakai inversi keras: elemen menyala menyala keluar dari ground, bukan sekadar tint." },
+        { "from": "challenger-pattern", "raise": "Detail teknis memakai garis putus-putus & align presisi ala skema fabrikasi." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "Ruang Kendali Misi (Mission Control)",
+      "kicker": "IMPECCABLE'S PICK",
+      "lineage": "Ruang kendali misi antariksa — Houston, MCC, konsol operasi",
+      "thesis": "Portofolio sebagai konsol operator: daftar proyek adalah kronologi misi di layar kendali.",
+      "palette": ["#06070a", "#0e1319", "#7ec8ff", "#ffb25c", "#e6eef7"],
+      "materials": ["dark console", "data rows", "status light", "screen stack"],
+      "viewport": "Satu baris status misi membentang di atas, proyek tersusun seperti daftar telemetry, cursor jadi crosshair penunjuk.",
+      "risk": "Paling dikenal audiens (karena itu jadi pick); bisa jatuh ke klise konsol bila tidak dikerjakan dengan disiplin instrumen."
+    },
+    {
+      "id": "challenger-map",
+      "label": "Peta Ornitasi Orbit",
+      "verdict": "competitive",
+      "lineage": "Peta orienteering & peta orbit satelit",
+      "thesis": "Portofolio sebagai peta: kamu menandai jalan landasan di atas terrain bintang, proyek jadi checkpoints.",
+      "palette": ["#0c1a12", "#9fd8b2", "#c8a24a", "#e8eef7", "#ffffff"],
+      "materials": ["contour lines", "course overlay", "compass", "fieldmap"],
+      "viewport": "Terrain bintang di latar, jalur ungu/emas proyek berkelok di atasnya dari hero ke kontak.",
+      "case": "Menang di axis kejelasan navigasi; kalah tipis di identifikasi 'instrumen scifi'.",
+      "kept": "Lapisan 'terrain tetap + rute hidup' sebagai cara bercerita perjalanan karier."
+    },
+    {
+      "id": "challenger-alphabet",
+      "label": "Abjad Sebagai Materi Ruang",
+      "verdict": "competitive",
+      "lineage": "Tipografi kinetik — huruf sebagai cuaca / lanskap",
+      "thesis": "Teks adalah materi: judul terurai jadi partikel bintang saat kursor lewat, lalu kembali merapat.",
+      "palette": ["#0a0a10", "#f0ede4", "#8fb7ff", "#6d6a5e"],
+      "materials": ["letter forms", "star matter", "wind", "vacuum paper"],
+      "viewport": "Headline raksasa dibuat dari huruf yang hidup-beberapa kerapung & beterbangan seperti debu bintang.",
+      "case": "Menang di axis identifikasi (modern & memorabel); kalah di kejelasan informasi massa.",
+      "kept": "Tipografi sebagai materi yang bergerak mengikuti kursor — diangkat ke nomor satu."
+    },
+    {
+      "id": "challenger-festival",
+      "label": "Billboard Lineup",
+      "verdict": "declined",
+      "lineage": "Poster lineup festival musik (size = fame)",
+      "thesis": "Proyek diurutkan murni oleh ukuran huruf, dari headline sampai ekor.",
+      "palette": ["#10131a", "#ffe66d", "#ffffff"],
+      "materials": ["one condensed face", "type-only", "justified blocks"],
+      "viewport": "Satu typeface, delapan ukuran; proyek utama melebar penuh, sisanya padat rapat di kaki.",
+      "case": "Gagal di dua axis: tidak membawa space/scifi dan menyembunyikan hierarki informasi.",
+      "kept": "Billing berbasis skala murni — hierarki proyek diatur oleh kekuatan, bukan ornamen."
+    },
+    {
+      "id": "challenger-safelight",
+      "label": "Ruang Gelap Safelight",
+      "verdict": "declined",
+      "lineage": "Kamar gelap fotografi di bawah lampu amber",
+      "thesis": "Tiap proyek 'dicetak' perlahan dari negatif ke foto di bawah safelight amber.",
+      "palette": ["#ffb25c", "#0d0a06", "#d8cbb8", "#231a12"],
+      "materials": ["amber safelight", "wet print", "test strips", "timers"],
+      "viewport": "Layar disapu cahaya amber; proyek muncul bertahap seperti cetakan yang berkembang.",
+      "case": "Atmosfer indah tapi tidak membawa ruang angkasa; hangatnya malah mengalahkan scifi-nya.",
+      "kept": "Amber sebagai satu-satunya kehangatan manusia di tengah kegelapan, dibawa ke arah terpilih."
+    },
+    {
+      "id": "challenger-desktop",
+      "label": "Desktop 1-bit",
+      "verdict": "declined",
+      "lineage": "Antarmuka komputer satu bit awal — dither piksel",
+      "thesis": "Semua abu-abu adalah dither; window-window hitam-putih menumpuk.",
+      "palette": ["#000000", "#ffffff", "#bdbdbd"],
+      "materials": ["pixel dither", "window chrome", "marching ants"],
+      "viewport": "Windows 1-bit menumpuk, seleksi marching-ants, ikon 32px.",
+      "case": "Berasal dari keluarga yang salah: retro-atari menabrak permintaan 'modern'.",
+      "kept": "State aktif memakai inversi keras — dipinjam agar kontrol terasa hidup."
+    },
+    {
+      "id": "challenger-pattern",
+      "label": "Envelope Pola Jahit",
+      "verdict": "declined",
+      "lineage": "Amplop pola menjahit & jaringan kertas tipis",
+      "thesis": "Layout halaman seperti lembaran pola: garis putus untuk apa yang belum dipotong.",
+      "palette": ["#d8cbb4", "#1c1a16", "#b03a3a"],
+      "materials": ["tissue paper", "drafting marks", "grain arrows", "notches"],
+      "viewport": "Kertas manila dengan garis potong & tanda arah serat; satu varian tampil solid, sisanya putus-putus.",
+      "case": "Kerajinan yang hangat tapi bukan bahasa ruang angkasa; identifikasi audiens rendah.",
+      "kept": "Varian garis putus yang presisi & alignment ketat sebagai detail teknis."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "Standar Kategori (dark + satu aksen)",
+    "thesis": "Dark portofolio biasa: karbon hitam, aksen satu warna, kartu grid.",
+    "palette": ["#0a0a0a", "#ffffff", "#6c5ce7"],
+    "materials": ["clean grid", "card", "one accent"],
+    "viewport": "Hero besar, grid kartu proyek 3 kolom, header biasa.",
+    "risk": "Tidak bisa dibedakan dari portofolio lain — dipilih dengan sengaja."
+  },
+  "steer": true,
+  "buildPath": { "value": "code", "toggle": false }
+}
