@@ -4,6 +4,7 @@ import type { MouseEvent } from "react"
 import Image from "next/image"
 import { FaLinkedin } from "react-icons/fa"
 import { siteConfig } from "@/src/site.config"
+import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 const PROFILE_IMAGE = "/img/profile.jpg"
@@ -79,27 +80,20 @@ export function AboutSection() {
           data-reveal
           style={{ transitionDelay: "80ms" }}
         >
-          <p className="about-label">
-            <span className="about-label__spark" aria-hidden="true">
-              ✦
-            </span>
-            About Me
-          </p>
+          <Tagline className="about-label">About Me</Tagline>
 
           <h2 id="about-heading" className="about-title">
-            A full-stack developer &amp;{" "}
+            A frontend developer building{" "}
             <span className="about-title__accent">
-              builder of fast, accessible web.
+              fast, accessible web.
             </span>
           </h2>
 
           <p className="about-text">
-            Full-Stack Engineer yang menguasai ekosistem web modern, termasuk
-            React.js, Vue.js, Laravel, dan Node.js. Terampil merancang
-            arsitektur perangkat lunak yang terstruktur, troubleshooting,
-            debugging, dan optimasi performa aplikasi web. Berpengalaman membuat
-            antarmuka responsif dan user-friendly dengan Tailwind CSS, dan
-            terbuka untuk peluang di lingkungan kerja yang inovatif.
+            Frontend developer yang fokus membangun antarmuka responsif dan
+            user-friendly dengan React.js dan Tailwind CSS. Saya juga
+            mengerjakan sisi backend dengan Laravel dan Node.js, serta mulai
+            mendalami pengembangan mobile.
           </p>
 
           <a

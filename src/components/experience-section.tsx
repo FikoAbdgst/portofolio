@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import Image from "next/image"
 import { experience, initialsOf } from "@/src/experience"
+import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 
@@ -53,12 +54,7 @@ export function ExperienceSection() {
     >
       <div className="container exp__grid">
         <div className="exp__intro exp-reveal" data-reveal>
-          <p className="about-label">
-            <span className="about-label__spark" aria-hidden="true">
-              ✦
-            </span>
-            Work History
-          </p>
+          <Tagline className="about-label">Work History</Tagline>
           <h2 id="experience-heading" className="exp-title">
             Experience
           </h2>

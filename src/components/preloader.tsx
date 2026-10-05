@@ -24,6 +24,7 @@ const EXIT_MS = 900
 export function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null)
   const countRef = useRef<HTMLSpanElement>(null)
+  const fillRef = useRef<HTMLSpanElement>(null)
   const [gone, setGone] = useState(false)
 
   useEffect(() => {
@@ -104,6 +105,9 @@ export function Preloader() {
         if (countRef.current) {
           countRef.current.textContent = String(value).padStart(3, "0")
         }
+        if (fillRef.current) {
+          fillRef.current.style.width = `${value}%`
+        }
         if (value === 100) root.dataset.phase = "ready"
       }
 
@@ -125,9 +129,14 @@ export function Preloader() {
   return (
     <div ref={rootRef} className="preloader" aria-hidden="true">
       <div className="page-grain preloader__grain" />
-      <span ref={countRef} className="preloader__count">
-        000
-      </span>
+      <div className="preloader__stack">
+        <span ref={countRef} className="preloader__count">
+          000
+        </span>
+      </div>
+      <div className="preloader__bar">
+        <span ref={fillRef} className="preloader__fill" />
+      </div>
     </div>
   )
 }

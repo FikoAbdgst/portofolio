@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const NAV_ITEMS = [
-  { href: "#top", label: "Home", id: "top" },
-  { href: "#about", label: "About", id: "about" },
-  { href: "#services", label: "Services", id: "services" },
-  { href: "#works", label: "Works", id: "works" },
-  { href: "#contact", label: "Contact", id: "contact" },
+  { href: "/#top", label: "Home", id: "top" },
+  { href: "/#about", label: "About", id: "about" },
+  { href: "/#projects", label: "Projects", id: "projects" },
+  { href: "/#services", label: "Services", id: "services" },
+  { href: "/#contact", label: "Contact", id: "contact" },
 ] as const
 
 export function SiteHeader() {
@@ -18,6 +19,16 @@ export function SiteHeader() {
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
   const navRef = useRef<HTMLElement>(null)
   const itemRefs = useRef(new Map<string, HTMLAnchorElement>())
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+  // Di luar home tidak ada section untuk diintip: turunkan status aktif
+  // langsung dari rute saat render (tanpa setState di dalam effect).
+  const routeActive = isHome
+    ? null
+    : pathname.startsWith("/projects")
+      ? "projects"
+      : pathname.slice(1)
+  const shownActive = routeActive ?? active
 
   useEffect(() => {
     if (!open) return
@@ -29,7 +40,8 @@ export function SiteHeader() {
   }, [open ])
 
   useEffect(() => {
-    const sections = ["about", "services", "works", "contact"]
+    if (!isHome) return
+    const sections = ["about", "projects", "services", "contact"]
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null)
     if (sections.length === 0) return
@@ -50,10 +62,10 @@ export function SiteHeader() {
       observer.disconnect()
       window.removeEventListener("scroll", onScroll)
     }
-  }, [])
+  }, [isHome])
 
   // Indikator putih meluncur mengikuti hover, kembali ke item aktif saat leave.
-  const highlighted = hovered ?? active
+  const highlighted = hovered ?? shownActive
   useEffect(() => {
     const measure = () => {
       const nav = navRef.current
@@ -104,7 +116,7 @@ export function SiteHeader() {
                   else itemRefs.current.delete(item.id)
                 }}
                 href={item.href}
-                aria-current={active === item.id ? "true" : undefined}
+                aria-current={shownActive === item.id ? "true" : undefined}
                 onMouseEnter={() => setHovered(item.id)}
                 onFocus={() => setHovered(item.id)}
                 className="relative z-10 rounded-xl px-5 py-2.5 font-[family-name:var(--font-sans)] text-[15px] font-medium no-underline transition-colors"
@@ -129,10 +141,10 @@ export function SiteHeader() {
             }}
           >
             <Link
-              href="#top"
+              href="/#top"
               onClick={() => setOpen(false)}
               className="rounded-xl px-4 py-2 font-[family-name:var(--font-sans)] text-[15px] font-medium no-underline"
-              style={active === "top" ? { background: "#fff", color: "#0a1128" } : { color: "rgba(255,255,255,0.75)" }}
+              style={shownActive === "top" ? { background: "#fff", color: "#0a1128" } : { color: "rgba(255,255,255,0.75)" }}
             >
               Home
             </Link>
@@ -158,7 +170,7 @@ export function SiteHeader() {
               style={{ background: "rgba(10,17,40,0.97)", borderColor: "rgba(255,255,255,0.1)" }}
             >
           {NAV_ITEMS.map((item) => {
-                const isActive = active === item.id
+                const isActive = shownActive === item.id
                 return (
                   <Link
                     key={item.id}

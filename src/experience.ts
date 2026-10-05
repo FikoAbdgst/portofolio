@@ -18,9 +18,9 @@ export const experience: ExperienceItem[] = [
     location: "Cimahi, Indonesia",
     current: true,
     bullets: [
-      "Membangun aplikasi web sesuai kebutuhan klien, dari tugas akademik hingga website perusahaan skala kecil-menengah.",
-      "Merancang UI/UX, koneksi database, dan deployment dengan React.js, Laravel, dan Tailwind CSS.",
-      "Mengoptimalkan performa website hingga ±40% lewat perbaikan struktur kode dan desain responsif.",
+      "Mengerjakan aplikasi web end-to-end untuk klien — dari diskusi kebutuhan hingga deployment — dengan React.js, Laravel, dan Tailwind CSS.",
+      "Merancang UI/UX, database, dan struktur kode modular yang mudah dilanjutkan developer lain.",
+      "Mengoptimalkan performa website hingga ±40% lewat perapihan kode dan desain responsif.",
     ],
   },
   {
@@ -30,9 +30,9 @@ export const experience: ExperienceItem[] = [
     period: "Oct 2025 - Dec 2025",
     location: "Bandung, Indonesia",
     bullets: [
-      "Mengembangkan sistem e-rapor berbasis web untuk SMK sebagai bagian dari program pengabdian masyarakat.",
-      "Membangun UI responsif dengan React dan TypeScript, terintegrasi dengan Laravel (Inertia.js).",
-      "Merancang arsitektur frontend dan membantu Backend Developer merancang endpoint serta database dasar.",
+      "Mengembangkan sistem e-rapor web untuk SMK dalam program pengabdian masyarakat.",
+      "Membangun UI responsif dengan React, TypeScript, dan Laravel (Inertia.js).",
+      "Merancang arsitektur frontend serta endpoint dan database dasar bersama backend developer.",
     ],
   },
   {
@@ -42,9 +42,9 @@ export const experience: ExperienceItem[] = [
     period: "Aug 2025 - Oct 2025",
     location: "Bandung, Indonesia",
     bullets: [
-      "Mengelola beberapa modul ERP, khususnya pengelolaan data CRUD dan logika transaksi dengan Vue.js.",
-      "Mempelajari standarisasi struktur folder dan arsitektur proyek skala besar.",
-      "Berkoordinasi dengan tim backend untuk integrasi data dan problem solving di sisi frontend.",
+      "Mengelola modul ERP: CRUD data dan logika transaksi dengan Vue.js.",
+      "Mengikuti standarisasi struktur folder dan arsitektur proyek skala besar.",
+      "Berkoordinasi dengan tim backend untuk integrasi data dan problem solving frontend.",
     ],
   },
   {
@@ -54,8 +54,8 @@ export const experience: ExperienceItem[] = [
     period: "Sep 2021 - Nov 2021",
     location: "Cimahi, Indonesia",
     bullets: [
-      "Menganalisis kebutuhan pengguna dan memimpin pengembangan aplikasi web dari ideasi hingga implementasi.",
-      "Meningkatkan efisiensi alur kerja internal ±25% lewat desain sistem terstruktur dan proses yang terdokumentasi.",
+      "Menganalisis kebutuhan pengguna dan membangun aplikasi web dari ideasi hingga implementasi.",
+      "Meningkatkan efisiensi alur kerja internal ±25% lewat sistem terstruktur yang terdokumentasi.",
     ],
   },
 ]

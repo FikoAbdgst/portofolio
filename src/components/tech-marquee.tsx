@@ -29,13 +29,19 @@ function Row({
   return (
     <div className="tech-marquee" role="presentation">
       <div className={`tech-track${reverse ? " tech-track--reverse" : ""}`}>
-        {[0, 1].map((half) => (
-          <ul key={half} aria-hidden={half === 1} className="tech-group">
-            {items.map((item) => (
-              <Pill key={`${half}-${item.name}`} item={item} />
-            ))}
-          </ul>
-        ))}
+        <div className="tech-track__inner">
+          {[0, 1, 2, 3].map((half) => (
+            <ul
+              key={half}
+              aria-hidden={half !== 0}
+              className="tech-group"
+            >
+              {items.map((item) => (
+                <Pill key={`${half}-${item.name}`} item={item} />
+              ))}
+            </ul>
+          ))}
+        </div>
       </div>
       <span className="sr-only">{label}</span>
     </div>
@@ -43,17 +49,13 @@ function Row({
 }
 
 export function TechMarquee() {
+  const items = [...techRow1, ...techRow2]
   return (
     <section aria-label="Tech Stack" className="tech-section">
       <div className="fade-up tech-rows" style={{ animationDelay: "0.15s" }}>
         <Row
-          items={techRow1}
-          label="Frontend dan teknologi inti: React, Next.js, Vue.js, TypeScript, Tailwind CSS, Inertia.js, Vite."
-        />
-        <Row
-          items={techRow2}
-          reverse
-          label="Backend, database, dan tools: Laravel, PHP, Node.js, Express.js, Spring Boot, MySQL, PostgreSQL, Python, Java, Kotlin, Docker, Bun."
+          items={items}
+          label="Tech stack: React, Next.js, Vue.js, TypeScript, Tailwind CSS, Inertia.js, Vite, Laravel, PHP, Node.js, Express.js, Spring Boot, MySQL, PostgreSQL, Python, Java, Kotlin, Docker, Bun."
         />
       </div>
     </section>

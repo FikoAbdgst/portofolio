@@ -165,8 +165,8 @@ export function Hero() {
             className="fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
             style={{ color: "#c9d4e3", animationDelay: "0.55s" }}
           >
-            Saya {siteConfig.name} — software engineer yang membangun website
-            cepat, aksesibel, dan SEO-friendly dari {siteConfig.location}.
+            Frontend developer yang membangun website cepat, aksesibel, dan
+            SEO-friendly.
           </p>
 
           <div
@@ -176,7 +176,7 @@ export function Hero() {
               animationDelay: "0.7s",
             }}
           >
-            <p>Design &amp; Build</p>
+            <p>Frontend Developer</p>
             <p>
               <span
                 className="status-dot mr-2 inline-block align-middle"
@@ -214,8 +214,6 @@ export function Hero() {
       </div>
 
       <HeroBottomBar />
-
-      <div aria-hidden="true" className="hero-bar-space" />
     </section>
   )
 }

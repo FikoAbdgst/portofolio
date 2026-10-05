@@ -2,12 +2,8 @@
 
 import Image from "next/image"
 import { FaAward, FaCalendarAlt } from "react-icons/fa"
-import {
-  certifications,
-  education,
-  type Certification,
-  type EducationEntry,
-} from "@/src/education"
+import { education, type EducationEntry } from "@/src/education"
+import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 export function EducationCard({
@@ -65,29 +61,6 @@ export function EducationCard({
   )
 }
 
-export function CertificationCard({
-  certification,
-  delay,
-}: {
-  certification: Certification
-  delay: number
-}) {
-  return (
-    <li
-      data-cursor-hover
-      data-reveal
-      className="edu-cert edu-reveal"
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      <div className="edu-cert__text">
-        <h3 className="edu-cert__name">{certification.name}</h3>
-        <p className="edu-cert__issuer">{certification.issuer}</p>
-      </div>
-      <span className="edu-cert__date">{certification.date}</span>
-    </li>
-  )
-}
-
 export function EducationSection() {
   const ref = useRevealGroup<HTMLElement>()
 
@@ -100,14 +73,9 @@ export function EducationSection() {
     >
       <div className="container">
         <div data-reveal className="edu-head edu-reveal">
-          <p className="edu-label">
-            <span aria-hidden="true" className="edu-label__spark">
-              ✦
-            </span>
-            Academic Background
-          </p>
+          <Tagline className="edu-label">Academic Background</Tagline>
           <h2 id="education-heading" className="edu-title">
-            Education &amp; Learning
+            Education
           </h2>
           <p className="edu-subtitle">
             Fondasi pengetahuan dan pengalaman akademik yang membentuk perjalanan
@@ -120,16 +88,6 @@ export function EducationSection() {
             <EducationCard key={entry.slug} entry={entry} delay={80} />
           ))}
         </div>
-
-        <ul className="edu-certs">
-          {certifications.map((certification, index) => (
-            <CertificationCard
-              key={certification.slug}
-              certification={certification}
-              delay={160 + index * 80}
-            />
-          ))}
-        </ul>
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import "./globals.css"
+import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi"
 import { siteConfig } from "@/src/site.config"
 import { SiteHeader } from "@/src/components/site-header"
 import { CustomCursor } from "@/src/components/custom-cursor"
@@ -32,7 +33,9 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.jobTitle}`,
     description: siteConfig.description,
-    images: [{ url: "/img/hero.png", width: 170, height: 179, alt: siteConfig.name }],
+    images: [
+      { url: "/img/hero.png", width: 170, height: 179, alt: siteConfig.name },
+    ],
   },
   twitter: {
     card: "summary",
@@ -76,7 +79,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
         */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
@@ -86,19 +93,47 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Preloader />
         <CustomCursor />
         <SiteHeader />
-        <main className="container relative z-10 flex-1 pb-16 pt-28 md:pt-32">{children}</main>
-        <footer
-          className="relative z-10 border-t py-7"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div className="container flex flex-col items-center gap-2 text-center text-sm text-[var(--text-muted)] sm:flex-row sm:justify-between sm:text-left">
-            <p>
-              © {new Date().getFullYear()} {siteConfig.name}. Dibuat dengan
-              Next.js &amp; Tailwind CSS.
+        <main className="container relative z-10 flex-1 pb-10 pt-28 md:pt-32">
+          {children}
+        </main>
+        <footer className="contact-footer">
+          <div className="container contact-footer__row">
+            <p className="contact-footer__copy">
+              © {new Date().getFullYear()} {siteConfig.name.toUpperCase()}.
             </p>
-            <a href={`mailto:${siteConfig.email}`} rel="noopener" className="no-underline">
-              {siteConfig.email}
-            </a>
+            <ul className="contact-footer__socials">
+              <li>
+                <a
+                  href={siteConfig.socials.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="contact-footer__link"
+                >
+                  <FiLinkedin aria-hidden="true" size={20} strokeWidth={1.5} />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={siteConfig.socials.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  className="contact-footer__link"
+                >
+                  <FiGithub aria-hidden="true" size={20} strokeWidth={1.5} />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  aria-label="Email"
+                  className="contact-footer__link"
+                >
+                  <FiMail aria-hidden="true" size={20} strokeWidth={1.5} />
+                </a>
+              </li>
+            </ul>
           </div>
         </footer>
       </body>
