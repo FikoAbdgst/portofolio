@@ -1956,7 +1956,9 @@ html.has-smooth-scroll {
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
   align-items: start;
-  max-width: 65%;
+  width: min(880px, 100%);
+  max-width: 100%;
+  min-width: 0;
   margin-inline: auto;
 }
 
@@ -1994,6 +1996,7 @@ html.has-smooth-scroll {
   --exp-pad-x: clamp(20px, 2vw, 26px);
   --exp-pad-bottom: clamp(28px, 2.8vw, 38px);
   position: relative;
+  min-width: 0;
   padding-left: 0;
 }
 
@@ -2022,6 +2025,7 @@ html.has-smooth-scroll {
   display: flex;
   flex-direction: column;
   gap: var(--exp-list-gap);
+  min-width: 0;
   margin: 0;
   padding: 0 0 0 var(--exp-list-pad);
   list-style: none;
@@ -2029,11 +2033,15 @@ html.has-smooth-scroll {
 
 .exp-item {
   position: relative;
+  min-width: 0;
 }
 
 /* Transparent border is always present, so hover never changes layout. */
 .exp-item__card {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
   padding: var(--exp-pad-top) var(--exp-pad-x) var(--exp-pad-bottom);
   border: 1px solid transparent;
   border-radius: 32px;
@@ -2076,17 +2084,28 @@ html.has-smooth-scroll {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  min-width: 0;
+}
+
+.exp-item__lead {
+  flex: 1 1 260px;
+  min-width: 0;
 }
 
 .exp-item__title {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(32px, 3.5vw, 42px);
+  font-size: clamp(26px, 2.4vw + 14px, 42px);
   line-height: 1.1;
   letter-spacing: -0.015em;
   color: #fff;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .exp-item__org {
@@ -2094,6 +2113,7 @@ html.has-smooth-scroll {
   align-items: center;
   gap: 14px;
   margin-top: 10px;
+  min-width: 0;
 }
 
 .exp-item__logo {
@@ -2122,11 +2142,15 @@ html.has-smooth-scroll {
 }
 
 .exp-item__company {
+  flex: 1 1 auto;
+  min-width: 0;
   font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.35;
   color: #9aa9c4;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .exp-item__meta {
@@ -2135,7 +2159,9 @@ html.has-smooth-scroll {
   align-items: flex-end;
   align-self: flex-start;
   gap: 8px;
-  flex-shrink: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
   margin-top: 6px;
 }
 
@@ -2143,15 +2169,18 @@ html.has-smooth-scroll {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 32px;
-  padding: 0 14px;
+  min-height: 32px;
+  max-width: 100%;
+  padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
   font-family: var(--font-mono);
   font-size: 13px;
+  line-height: 1.4;
   color: #67e8f9;
   white-space: nowrap;
+  overflow-wrap: break-word;
 }
 
 .exp-item__live {
@@ -2216,6 +2245,50 @@ html.has-smooth-scroll {
     grid-template-columns: 340px minmax(0, 1fr);
     gap: 48px;
   }
+
+  /* Tablet: beri napas, cegah judul + pill periode saling jepit. */
+  .exp__grid {
+    width: min(720px, 100%);
+  }
+
+  .exp-timeline {
+    --exp-list-gap: clamp(24px, 3.5vw, 40px);
+    --exp-pad-x: clamp(18px, 2.4vw, 22px);
+  }
+
+  .exp-item__head {
+    gap: 14px 20px;
+  }
+
+  .exp-item__title {
+    font-size: clamp(24px, 3.4vw, 32px);
+  }
+
+  .exp-item__company {
+    font-size: 17px;
+  }
+
+  .exp-item__meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .exp-item__period {
+    white-space: normal;
+  }
+
+  .exp-item__location {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #7d8aa5;
+    overflow-wrap: break-word;
+  }
 }
 
 @media (max-width: 767px) {
@@ -2244,7 +2317,8 @@ html.has-smooth-scroll {
   .exp__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
   }
 
   .exp__intro {
@@ -2301,6 +2375,7 @@ html.has-smooth-scroll {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    flex-wrap: nowrap;
     gap: 0;
     min-width: 0;
   }
@@ -2308,7 +2383,9 @@ html.has-smooth-scroll {
   .exp-item__lead {
     display: flex;
     flex-direction: column;
+    flex: none;
     min-width: 0;
+    max-width: 100%;
   }
 
   .exp-item__meta {
@@ -2321,10 +2398,12 @@ html.has-smooth-scroll {
   }
 
   .exp-item__title {
-    font-size: 22px;
+    font-size: clamp(20px, 5.6vw, 22px);
     line-height: 1.25;
     letter-spacing: -0.01em;
     overflow-wrap: break-word;
+    word-break: break-word;
+    text-wrap: balance;
   }
 
   .exp-item__org {
@@ -4125,17 +4204,44 @@ body {
   }
 
   .exp-timeline {
-    --exp-list-pad: 24px;
-    --exp-list-gap: 16px;
-    --exp-pad-x: 14px;
+    --exp-list-pad: 22px;
+    --exp-list-gap: 14px;
+    --exp-pad-top: 14px;
+    --exp-pad-x: 12px;
+    --exp-pad-bottom: 16px;
+  }
+
+  .exp-timeline__line,
+  .exp-timeline__fill {
+    left: 6px;
+  }
+
+  .exp-item__node {
+    width: 14px;
+    height: 14px;
+  }
+
+  .exp-item__card {
+    border-radius: 16px;
   }
 
   .exp-item__title {
-    font-size: 20px;
+    font-size: 19px;
+  }
+
+  .exp-item__org {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .exp-item__logo {
+    width: 32px;
+    height: 32px;
   }
 
   .exp-item__company {
     font-size: 14px;
+    flex-basis: min(100%, 180px);
   }
 
   .exp-item__bullets li {
