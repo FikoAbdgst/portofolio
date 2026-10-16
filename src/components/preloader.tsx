@@ -67,6 +67,10 @@ export function Preloader() {
       cancelAnimationFrame(raf)
       window.removeEventListener("load", onLoad)
       doc.classList.remove("is-preloading")
+      doc.classList.add("is-ready")
+      // Beri tahu hero: counter 0→100 selesai + plate mulai terangkat,
+      // animasi hero boleh jalan sekarang.
+      window.dispatchEvent(new CustomEvent("preloader:done"))
       // Apa pun yang bergeser selama load, halaman tetap terbuka di atas.
       window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
       root.dataset.state = "done"

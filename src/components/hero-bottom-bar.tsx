@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react"
 import { siteConfig } from "@/src/site.config"
+import { useLang } from "@/src/i18n"
 
 const SOCIALS = [
   { label: "LinkedIn", href: siteConfig.socials.linkedin },
@@ -56,6 +57,7 @@ function MagneticPull({ children }: { children: ReactNode }) {
 }
 
 export function HeroBottomBar() {
+  const { t } = useLang()
   return (
     <div className="hero-bar">
       <div className="container">
@@ -102,7 +104,7 @@ export function HeroBottomBar() {
               data-cursor-label=""
               className="hero-scroll-pill"
             >
-              Contact Us
+              {t.hero.contact}
               <span aria-hidden="true" className="hero-scroll-pill__arrow">
                 &rarr;
               </span>

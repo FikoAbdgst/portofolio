@@ -24,11 +24,6 @@ const socials = [
     href: siteConfig.socials.linkedin,
     note: "Profil profesional",
   },
-  {
-    label: "Twitter / X",
-    href: siteConfig.socials.twitter,
-    note: "Update harian",
-  },
 ]
 
 export default function ContactPage() {

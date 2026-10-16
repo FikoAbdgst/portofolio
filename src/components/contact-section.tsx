@@ -3,6 +3,7 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { siteConfig } from "@/src/site.config"
+import { useLang } from "@/src/i18n"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 const MAILTO = `mailto:${siteConfig.email}?subject=Project%20Inquiry`
@@ -52,6 +53,7 @@ function Magnetic({ children }: { children: ReactNode }) {
 
 export function ContactSection() {
   const ref = useRevealGroup<HTMLElement>()
+  const { t } = useLang()
 
   return (
     <section
@@ -70,7 +72,7 @@ export function ContactSection() {
               style={{ transitionDelay: "80ms" }}
             >
               <span className="status-dot" aria-hidden="true" />
-              Available for new projects
+              {t.contact.pill}
             </p>
             <h2
               id="contact-heading"
@@ -78,9 +80,9 @@ export function ContactSection() {
               data-reveal
               style={{ transitionDelay: "160ms" }}
             >
-              Let&apos;s work
+              {t.contact.titleA}
               <br />
-              <span className="contact-title__muted">together.</span>
+              <span className="contact-title__muted">{t.contact.titleB}</span>
             </h2>
             <div
               className="contact-reveal"
@@ -89,7 +91,7 @@ export function ContactSection() {
             >
               <Magnetic>
                 <a href={MAILTO} data-cursor-hover className="contact-cta">
-                  <span className="contact-cta__label">Start a Project</span>
+                  <span className="contact-cta__label">{t.contact.cta}</span>
                   <ArrowUpRight
                     aria-hidden="true"
                     size={20}

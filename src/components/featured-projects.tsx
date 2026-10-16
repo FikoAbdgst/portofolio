@@ -3,12 +3,14 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { projects } from "@/src/projects"
+import { useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { ProjectCard } from "@/src/components/project-card"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 export function FeaturedProjects() {
   const ref = useRevealGroup<HTMLElement>()
+  const { t } = useLang()
   const featured = projects.filter((project) => project.featured)
 
   return (
@@ -23,12 +25,12 @@ export function FeaturedProjects() {
         className="proj-reveal flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
       >
         <div>
-          <Tagline className="about-label">Selected Projects</Tagline>
+          <Tagline className="about-label">{t.projects.tagline}</Tagline>
           <h2
             id="projects-heading"
             className="mt-4 font-[family-name:var(--font-display)] text-[clamp(44px,6vw,84px)] leading-[1.05] font-semibold text-[#E8EEF8]"
           >
-            Featured Projects
+            {t.projects.title}
           </h2>
         </div>
         <p
@@ -36,7 +38,7 @@ export function FeaturedProjects() {
           className="proj-reveal max-w-sm font-[family-name:var(--font-sans)] text-base leading-relaxed text-[#9AA9C4] md:pb-2 md:text-right"
           style={{ transitionDelay: "80ms" }}
         >
-          A curated selection of projects I&apos;ve designed and built.
+          {t.projects.desc}
         </p>
       </div>
 
@@ -60,7 +62,7 @@ export function FeaturedProjects() {
           className="about-linkedin"
           style={{ marginTop: 0 }}
         >
-          View all projects
+          {t.projects.viewAll}
           <ArrowRight aria-hidden="true" size={20} strokeWidth={2} />
         </Link>
       </div>

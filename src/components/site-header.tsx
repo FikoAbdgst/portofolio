@@ -3,13 +3,19 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { ChevronDown } from "lucide-react"
+import { useLang } from "@/src/i18n"
+import { LangToggle } from "@/src/components/lang-toggle"
+import { scrollToSection } from "@/src/components/smooth-scroll"
 
-const NAV_ITEMS = [
-  { href: "/#top", label: "Home", id: "top" },
-  { href: "/#about", label: "About", id: "about" },
-  { href: "/#projects", label: "Projects", id: "projects" },
-  { href: "/#services", label: "Services", id: "services" },
-  { href: "/#contact", label: "Contact", id: "contact" },
+type NavId = "top" | "about" | "projects" | "services" | "contact"
+
+const NAV_DEFS = [
+  { href: "/#top", id: "top" },
+  { href: "/#about", id: "about" },
+  { href: "/#projects", id: "projects" },
+  { href: "/#services", id: "services" },
+  { href: "/#contact", id: "contact" },
 ] as const
 
 export function SiteHeader() {
@@ -17,10 +23,30 @@ export function SiteHeader() {
   const [active, setActive] = useState<string>("top")
   const [hovered, setHovered] = useState<string | null>(null)
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
+  // Tray bahasa menempel di bawah navbar: terbuka di awal, menutup ke atas
+  // otomatis setelah 2 detik; dibuka lagi lewat handle chevron.
+  const [langOpen, setLangOpen] = useState(true)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setLangOpen(false), 2000)
+    return () => window.clearTimeout(timer)
+  }, [])
   const navRef = useRef<HTMLElement>(null)
   const itemRefs = useRef(new Map<string, HTMLAnchorElement>())
   const pathname = usePathname()
   const isHome = pathname === "/"
+  const { t } = useLang()
+  const navLabels: Record<NavId, string> = {
+    top: t.nav.home,
+    about: t.nav.about,
+    projects: t.nav.projects,
+    services: t.nav.services,
+    contact: t.nav.contact,
+  }
+  const NAV_ITEMS = NAV_DEFS.map((def) => ({
+    ...def,
+    label: navLabels[def.id as NavId],
+  }))
   // Di luar home tidak ada section untuk diintip: turunkan status aktif
   // langsung dari rute saat render (tanpa setState di dalam effect).
   const routeActive = isHome
@@ -83,9 +109,10 @@ export function SiteHeader() {
   return (
     <header className="fade-up pointer-events-none fixed inset-x-0 top-4 z-40 flex w-full justify-center px-4 md:top-6">
       <div className="pointer-events-auto">
+        <div className="hidden flex-col items-center md:flex">
         <nav
           ref={navRef}
-          aria-label="Navigasi utama"
+          aria-label={t.nav.mainLabel}
           onMouseLeave={() => setHovered(null)}
           className="relative hidden items-center gap-1 rounded-2xl border p-2 md:flex"
           style={{
@@ -119,6 +146,13 @@ export function SiteHeader() {
                 aria-current={shownActive === item.id ? "true" : undefined}
                 onMouseEnter={() => setHovered(item.id)}
                 onFocus={() => setHovered(item.id)}
+                onClick={(e) => {
+                  // Cegat router Next (lompat instan) agar scroll mulus 1300ms.
+                  if (!isHome) return
+                  e.preventDefault()
+                  window.history.replaceState(null, "", item.href)
+                  scrollToSection(item.id)
+                }}
                 className="relative z-10 rounded-xl px-5 py-2.5 font-[family-name:var(--font-sans)] text-[15px] font-medium no-underline transition-colors"
                 style={isOn ? { color: "#0a1128" } : { color: "rgba(255,255,255,0.75)" }}
               >
@@ -127,10 +161,36 @@ export function SiteHeader() {
             )
           })}
         </nav>
+          <div
+            id="lang-tray-desktop"
+            className={`lang-tray${langOpen ? " is-open" : ""}`}
+          >
+            <div className="lang-tray__clip">
+              <div className="lang-tray__body">
+                <LangToggle />
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="lang-handle"
+            aria-expanded={langOpen}
+            aria-controls="lang-tray-desktop"
+            aria-label={langOpen ? t.nav.hideLang : t.nav.showLang}
+            onClick={() => setLangOpen((v) => !v)}
+          >
+            <ChevronDown
+              aria-hidden="true"
+              size={14}
+              strokeWidth={2.5}
+              className={`lang-handle__chev${langOpen ? " is-up" : ""}`}
+            />
+          </button>
+        </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex flex-col items-center md:hidden">
           <nav
-            aria-label="Navigasi utama"
+            aria-label={t.nav.mainLabel}
             className="flex items-center gap-1 rounded-2xl border p-2"
             style={{
               background: "rgba(10, 17, 40, 0.85)",
@@ -142,30 +202,61 @@ export function SiteHeader() {
           >
             <Link
               href="/#top"
-              onClick={() => setOpen(false)}
+              onClick={(e) => {
+                setOpen(false)
+                if (!isHome) return
+                e.preventDefault()
+                window.history.replaceState(null, "", "/#top")
+                scrollToSection("top")
+              }}
               className="rounded-xl px-4 py-2 font-[family-name:var(--font-sans)] text-[15px] font-medium no-underline"
               style={shownActive === "top" ? { background: "#fff", color: "#0a1128" } : { color: "rgba(255,255,255,0.75)" }}
             >
-              Home
+              {t.nav.home}
             </Link>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-controls="site-menu-mobile"
               aria-expanded={open}
-              aria-label={open ? "Tutup menu" : "Buka menu"}
-              className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl text-white"
+              aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+              className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-xl text-white"
             >
               <span aria-hidden="true" className={`h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ${open ? "translate-y-[4px] rotate-45" : ""}`} />
               <span aria-hidden="true" className={`h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ${open ? "-translate-y-[4px] -rotate-45" : ""}`} />
             </button>
           </nav>
+          <div
+            id="lang-tray-mobile"
+            className={`lang-tray${langOpen ? " is-open" : ""}`}
+          >
+            <div className="lang-tray__clip">
+              <div className="lang-tray__body">
+                <LangToggle />
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="lang-handle"
+            aria-expanded={langOpen}
+            aria-controls="lang-tray-mobile"
+            aria-label={langOpen ? t.nav.hideLang : t.nav.showLang}
+            onClick={() => setLangOpen((v) => !v)}
+          >
+            <ChevronDown
+              aria-hidden="true"
+              size={14}
+              strokeWidth={2.5}
+              className={`lang-handle__chev${langOpen ? " is-up" : ""}`}
+            />
+          </button>
         </div>
 
         {open && (
           <div id="site-menu-mobile" className="mt-2 md:hidden">
             <nav
-              aria-label="Menu ponsel"
+              aria-label={t.nav.mobileMenuLabel}
               className="flex flex-col gap-1 rounded-2xl border p-3"
               style={{ background: "rgba(10,17,40,0.97)", borderColor: "rgba(255,255,255,0.1)" }}
             >
@@ -175,7 +266,13 @@ export function SiteHeader() {
                   <Link
                     key={item.id}
                     href={item.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      setOpen(false)
+                      if (!isHome) return
+                      e.preventDefault()
+                      window.history.replaceState(null, "", item.href)
+                      scrollToSection(item.id)
+                    }}
                     className="rounded-xl px-4 py-3 font-[family-name:var(--font-sans)] text-base font-medium no-underline hover:bg-white/5"
                     style={isActive ? { background: "#fff", color: "#0a1128" } : { color: "#fff" }}
                   >

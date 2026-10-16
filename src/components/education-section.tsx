@@ -2,16 +2,23 @@
 
 import Image from "next/image"
 import { FaAward, FaCalendarAlt } from "react-icons/fa"
-import { education, type EducationEntry } from "@/src/education"
+import {
+  certifications,
+  education,
+  type EducationEntry,
+} from "@/src/education"
+import { eduDegreeEn, eduHighlightsEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 export function EducationCard({
   entry,
   delay,
+  lang,
 }: {
   entry: EducationEntry
   delay: number
+  lang: "id" | "en"
 }) {
   return (
     <article
@@ -49,12 +56,16 @@ export function EducationCard({
           </div>
         </div>
 
-        <p className="edu-degree">{entry.degree}</p>
+        <p className="edu-degree">
+          {lang === "en" ? eduDegreeEn : entry.degree}
+        </p>
         <div aria-hidden="true" className="edu-divider" />
         <ul className="edu-highlights">
-          {entry.highlights.map((highlight) => (
-            <li key={highlight}>{highlight}</li>
-          ))}
+          {(lang === "en" ? eduHighlightsEn : entry.highlights).map(
+            (highlight) => (
+              <li key={highlight}>{highlight}</li>
+            ),
+          )}
         </ul>
       </div>
     </article>
@@ -63,6 +74,7 @@ export function EducationCard({
 
 export function EducationSection() {
   const ref = useRevealGroup<HTMLElement>()
+  const { lang, t } = useLang()
 
   return (
     <section
@@ -73,21 +85,58 @@ export function EducationSection() {
     >
       <div className="container">
         <div data-reveal className="edu-head edu-reveal">
-          <Tagline className="edu-label">Academic Background</Tagline>
+          <Tagline className="edu-label">{t.education.tagline}</Tagline>
           <h2 id="education-heading" className="edu-title">
-            Education
+            {t.education.title}
           </h2>
           <p className="edu-subtitle">
-            Fondasi pengetahuan dan pengalaman akademik yang membentuk perjalanan
-            profesional saya.
+            {t.education.subtitle}
           </p>
         </div>
 
         <div className="edu-card-wrap">
           {education.map((entry) => (
-            <EducationCard key={entry.slug} entry={entry} delay={80} />
+            <EducationCard
+              key={entry.slug}
+              entry={entry}
+              delay={80}
+              lang={lang}
+            />
           ))}
         </div>
+
+        <div
+          data-reveal
+          className="edu-head edu-reveal"
+          style={{ marginTop: "64px" }}
+        >
+          <Tagline className="edu-label">{t.education.certTagline}</Tagline>
+          <h3 className="edu-title" style={{ fontSize: "clamp(24px, 2.6vw, 32px)" }}>
+            {t.education.certTitle}
+          </h3>
+        </div>
+
+        <ul className="edu-certs">
+          {certifications.map((cert, index) => (
+            <li
+              key={cert.slug}
+              data-reveal
+              className="edu-reveal edu-cert"
+              style={{ transitionDelay: `${index * 80}ms` }}
+            >
+              <div className="edu-cert__text">
+                <p className="edu-cert__name">{cert.name}</p>
+                <p className="edu-cert__issuer">
+                  {cert.issuer}
+                  {cert.credentialId
+                    ? ` · Credential ID: ${cert.credentialId}`
+                    : ""}
+                </p>
+              </div>
+              <span className="edu-cert__date">{cert.period}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

@@ -55,7 +55,7 @@ export function TechMarquee() {
       <div className="fade-up tech-rows" style={{ animationDelay: "0.15s" }}>
         <Row
           items={items}
-          label="Tech stack: React, Next.js, Vue.js, TypeScript, Tailwind CSS, Inertia.js, Vite, Laravel, PHP, Node.js, Express.js, Spring Boot, MySQL, PostgreSQL, Python, Java, Kotlin, Docker, Bun."
+          label="Tech stack: React, Next.js, Vue.js, TypeScript, Tailwind CSS, Inertia.js, Vite, Pinia, Axios, Blade, Laravel, Node.js, Express.js, MySQL, PostgreSQL, Docker, Java, Python."
         />
       </div>
     </section>

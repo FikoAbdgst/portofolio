@@ -1,8 +1,15 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode, type MouseEvent } from "react"
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type MouseEvent,
+} from "react"
 import Link from "next/link"
 import { siteConfig } from "@/src/site.config"
+import { useLang } from "@/src/i18n"
 import { HeroBottomBar } from "@/src/components/hero-bottom-bar"
 
 /** Spotlight lembut 600px mengikuti mouse dengan lerp ~0.08 (khusus hero). */
@@ -124,6 +131,28 @@ export function Hero() {
   const displayName = siteConfig.name.toUpperCase()
   const nameRef = useRef<HTMLHeadingElement>(null)
   const scrollRef = useRef<HTMLParagraphElement>(null)
+  const { t } = useLang()
+  // Animasi hero ditahan sampai preloader selesai 0→100 + plate terangkat.
+  const [ready, setReady] = useState(() => {
+    if (typeof document !== "undefined") {
+      if (document.documentElement.classList.contains("is-ready")) return true
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        return true
+    }
+    return false
+  })
+
+  useEffect(() => {
+    if (ready) return
+    const onDone = () => setReady(true)
+    window.addEventListener("preloader:done", onDone, { once: true })
+    // Failsafe: jangan kunci hero selamanya bila preloader gagal.
+    const failsafe = window.setTimeout(onDone, 7000)
+    return () => {
+      window.removeEventListener("preloader:done", onDone)
+      window.clearTimeout(failsafe)
+    }
+  }, [ready])
 
   // Parallax nama raksasa 0.15x + SCROLL memudar setelah 80px scroll.
   useEffect(() => {
@@ -156,7 +185,7 @@ export function Hero() {
     <section
       id="top"
       aria-label="Intro"
-      className="relative flex min-h-svh flex-col overflow-hidden"
+      className={`relative flex min-h-svh flex-col overflow-hidden${ready ? " hero-ready" : ""}`}
     >
       <Spotlight />
       <div className="container relative z-10 flex flex-1 flex-col justify-center px-5 pb-10 pt-28 md:px-6 md:pb-14 md:pt-40">
@@ -165,8 +194,7 @@ export function Hero() {
             className="fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
             style={{ color: "#c9d4e3", animationDelay: "0.55s" }}
           >
-            Frontend developer yang membangun website cepat, aksesibel, dan
-            SEO-friendly.
+            {t.hero.intro}
           </p>
 
           <div
@@ -176,16 +204,16 @@ export function Hero() {
               animationDelay: "0.7s",
             }}
           >
-            <p>Frontend Developer</p>
+            <p>{t.hero.role}</p>
             <p>
               <span
                 className="status-dot mr-2 inline-block align-middle"
                 aria-hidden="true"
               />
-              Available for work
+              {t.hero.available}
             </p>
             <p ref={scrollRef} className="tracking-[0.3em] uppercase">
-              Scroll
+              {t.hero.scroll}
               <span
                 aria-hidden="true"
                 className="scroll-line ml-3 inline-block h-px w-10 translate-y-[-4px] bg-current"

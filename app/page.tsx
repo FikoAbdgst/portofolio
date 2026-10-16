@@ -1,7 +1,6 @@
 import { siteConfig } from "@/src/site.config"
 import { JsonLd } from "@/src/components/json-ld"
 import { Hero } from "@/src/components/hero"
-import { TechMarquee } from "@/src/components/tech-marquee"
 import { AboutSection } from "@/src/components/about-section"
 import { ExperienceSection } from "@/src/components/experience-section"
 import { EducationSection } from "@/src/components/education-section"
@@ -19,12 +18,16 @@ export default function HomePage() {
     url: siteConfig.url,
     email: `mailto:${siteConfig.email}`,
     address: { "@type": "PostalAddress", addressLocality: siteConfig.location },
-    sameAs: [
-      siteConfig.socials.github,
-      siteConfig.socials.linkedin,
-      siteConfig.socials.twitter,
+    sameAs: [siteConfig.socials.github, siteConfig.socials.linkedin],
+    knowsAbout: [
+      "React",
+      "Next.js",
+      "Vue.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Laravel",
+      "Node.js",
     ],
-    knowsAbout: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
   }
 
   return (
@@ -37,7 +40,6 @@ export default function HomePage() {
         <div aria-hidden="true" className="page-grain page-grain--landing" />
         <div className="landing-content">
           <Hero />
-          <TechMarquee />
           <AboutSection />
           <ExperienceSection />
           <EducationSection />

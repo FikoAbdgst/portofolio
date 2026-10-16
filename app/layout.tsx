@@ -4,6 +4,9 @@ import "./globals.css"
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi"
 import { siteConfig } from "@/src/site.config"
 import { SiteHeader } from "@/src/components/site-header"
+import { SmoothScroll } from "@/src/components/smooth-scroll"
+import { SectionFocus } from "@/src/components/section-focus"
+import { LanguageProvider } from "@/src/i18n"
 import { CustomCursor } from "@/src/components/custom-cursor"
 import { ChalkGrain } from "@/src/components/chalk-grain"
 import { Preloader } from "@/src/components/preloader"
@@ -42,7 +45,6 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} — ${siteConfig.jobTitle}`,
     description: siteConfig.description,
     images: ["/img/hero.png"],
-    creator: siteConfig.socials.twitter,
   },
   robots: {
     index: true,
@@ -53,6 +55,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
 }
@@ -91,8 +94,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <ChalkGrain />
         <Preloader />
-        <CustomCursor />
-        <SiteHeader />
+        <LanguageProvider>
+          <SmoothScroll />
+          <SectionFocus />
+          <CustomCursor />
+          <SiteHeader />
         <main className="container relative z-10 flex-1 pb-10 pt-28 md:pt-32">
           {children}
         </main>
@@ -136,6 +142,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </ul>
           </div>
         </footer>
+        </LanguageProvider>
       </body>
     </html>
   )

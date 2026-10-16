@@ -27,7 +27,7 @@ export const services: Service[] = [
     slug: "fullstack-integration",
     title: "Full-Stack Integration",
     description:
-      "Menghubungkan frontend dengan backend dan database lewat API menggunakan Laravel (Inertia.js), Node.js, dan MySQL.",
+      "Menghubungkan frontend dengan backend dan database lewat API menggunakan Laravel (Inertia.js), Node.js, MySQL, dan PostgreSQL.",
     icon: Database,
   },
   {

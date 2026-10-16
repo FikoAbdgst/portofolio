@@ -26,3 +26,40 @@ export const education: EducationEntry[] = [
   },
 ]
 
+export type Certification = {
+  slug: string
+  name: string
+  issuer: string
+  period: string
+  credentialId?: string
+}
+
+/** Sumber data: portfolio-data.md bagian 4.2. */
+export const certifications: Certification[] = [
+  {
+    slug: "frontend-developer-react",
+    name: "Frontend Developer (React)",
+    issuer: "HackerRank",
+    period: "May 2025",
+    credentialId: "8D91C23F837B",
+  },
+  {
+    slug: "javascript-dasar",
+    name: "JavaScript Dasar",
+    issuer: "CODEPOLITAN",
+    period: "Apr 2025",
+  },
+  {
+    slug: "java-foundations",
+    name: "Java Foundations",
+    issuer: "ORACLE Academy",
+    period: "Jun 2021",
+  },
+  {
+    slug: "java-fundamentals",
+    name: "Java Fundamentals",
+    issuer: "ORACLE Academy",
+    period: "Jan 2021",
+  },
+]
+

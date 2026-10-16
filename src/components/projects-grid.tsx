@@ -7,6 +7,7 @@ import {
   type ProjectCategory,
 } from "@/src/projects"
 import { ProjectCard } from "@/src/components/project-card"
+import { useLang } from "@/src/i18n"
 
 type Filter = "All" | ProjectCategory
 
@@ -14,6 +15,8 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
   const ref = useRef<HTMLDivElement>(null)
   const skippedFirstFilterRun = useRef(false)
   const [filter, setFilter] = useState<Filter>("All")
+  const { t } = useLang()
+  const allLabel = t.projects.all
 
   const categories = PROJECT_CATEGORIES.filter((category) =>
     projects.some((project) => project.category === category),
@@ -65,10 +68,11 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
       <div
         className="flex flex-wrap gap-2"
         role="group"
-        aria-label="Filter projects by category"
+        aria-label={t.projects.filterLabel}
       >
         {(["All", ...categories] as Filter[]).map((category) => {
           const isActive = filter === category
+          const label = category === "All" ? allLabel : category
           return (
             <button
               key={category}
@@ -82,7 +86,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   : "border-white/15 bg-transparent text-[#9aa9c4] hover:border-white/40 hover:text-white"
               }`}
             >
-              {category}
+              {label}
             </button>
           )
         })}
@@ -90,7 +94,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
 
       {visible.length === 0 ? (
         <p className="mt-10 font-[family-name:var(--font-sans)] text-base text-[#9aa9c4]">
-          Belum ada project pada kategori ini.
+          {t.projects.empty}
         </p>
       ) : (
         <ul className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">

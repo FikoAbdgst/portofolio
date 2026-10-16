@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react"
 import { projects } from "@/src/projects"
 import { techRow1, techRow2 } from "@/src/tech-stack"
 import { services } from "@/src/services"
+import { serviceDescEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { useCountUp } from "@/src/components/use-count-up"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
@@ -41,6 +42,7 @@ function Stat({
 export function ServicesSection() {
   const ref = useRevealGroup<HTMLElement>()
   const [statsStarted, setStatsStarted] = useState(false)
+  const { lang, t } = useLang()
 
   useEffect(() => {
     const root = ref.current
@@ -62,11 +64,11 @@ export function ServicesSection() {
   }, [ref])
 
   const stats = [
-    { label: "Projects Done", value: projects.length || 8 },
-    { label: "Years Coding", value: new Date().getFullYear() - 2023 },
+    { label: t.services.statProjects, value: projects.length || 8 },
+    { label: t.services.statYears, value: new Date().getFullYear() - 2021 },
     {
-      label: "Tech Stack",
-      value: 10,
+      label: t.services.statStack,
+      value: techRow1.length + techRow2.length,
     },
   ]
 
@@ -81,7 +83,7 @@ export function ServicesSection() {
         <div className="services__intro">
           <div data-reveal className="services-reveal">
             <span style={{ ["--tag-icon" as string]: "#22d3ee" }}>
-              <Tagline className="about-label">What I Do</Tagline>
+              <Tagline className="about-label">{t.services.tagline}</Tagline>
             </span>
           </div>
           <h2
@@ -90,19 +92,16 @@ export function ServicesSection() {
             className="services-reveal services-title"
             style={{ transitionDelay: "80ms" }}
           >
-            Turning Ideas into
+            {t.services.titleA}
             <br aria-hidden="true" className="services-title__break" />{" "}
-            <span className="services-title__accent">Digital Reality</span>
+            <span className="services-title__accent">{t.services.titleB}</span>
           </h2>
           <p
             data-reveal
             className="services-reveal services-text"
             style={{ transitionDelay: "160ms" }}
           >
-            Saya berfokus di frontend dan memahami sisi full-stack, sehingga
-            bisa membangun antarmuka yang rapi sekaligus menghubungkannya dengan
-            backend. Dari website company profile hingga sistem informasi,
-            hasilnya cepat, mudah diakses, dan berpusat pada pengguna.
+            {t.services.intro}
           </p>
 
           <div className="services-stats">
@@ -123,7 +122,7 @@ export function ServicesSection() {
             style={{ transitionDelay: "480ms" }}
           >
             <a href="#contact" data-cursor-hover className="services-cta">
-              Let&apos;s Collaborate
+              {t.services.cta}
               <ArrowUpRight
                 aria-hidden="true"
                 size={20}
@@ -153,7 +152,11 @@ export function ServicesSection() {
                   />
                   <div className="services-card__body">
                     <h3 className="services-card__title">{service.title}</h3>
-                    <p className="services-card__desc">{service.description}</p>
+                    <p className="services-card__desc">
+                      {lang === "en"
+                        ? (serviceDescEn[service.slug] ?? service.description)
+                        : service.description}
+                    </p>
                   </div>
                 </article>
               </li>

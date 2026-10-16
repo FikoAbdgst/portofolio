@@ -1,7 +1,10 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import type { Project } from "@/src/projects"
+import { useLang } from "@/src/i18n"
 
 export function ProjectCard({
   project,
@@ -10,10 +13,11 @@ export function ProjectCard({
   project: Project
   priority?: boolean
 }) {
+  const { t } = useLang()
   return (
     <Link
       href={`/projects/${project.slug}/`}
-      aria-label={`View ${project.title}`}
+      aria-label={`${t.projects.viewLabel} ${project.title}`}
       data-cursor-hover
       className="group block rounded-[28px] no-underline outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a1128]"
     >

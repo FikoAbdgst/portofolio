@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { siteConfig } from "@/src/site.config"
 import { projects } from "@/src/projects"
 import { JsonLd } from "@/src/components/json-ld"
-import { Tagline } from "@/src/components/ui/Tagline"
-import { ProjectsGrid } from "@/src/components/projects-grid"
+import { ProjectsHeader } from "@/src/components/projects-header"
 
 export const metadata: Metadata = {
   title: `All Projects | ${siteConfig.name}`,
@@ -37,28 +35,7 @@ export default function ProjectsPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Link
-        href="/"
-        className="inline-block font-[family-name:var(--font-sans)] text-sm font-medium text-[#9aa9c4] no-underline transition-colors hover:text-white"
-      >
-        ← Back to home
-      </Link>
-
-      <div className="mt-6">
-        <Tagline className="about-label">All Projects</Tagline>
-        <h1 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(44px,6vw,84px)] leading-[1.05] font-semibold text-[#E8EEF8]">
-          All Projects
-        </h1>
-        <p className="mt-4 max-w-2xl font-[family-name:var(--font-sans)] text-lg leading-relaxed text-[#9aa9c4]">
-          Koleksi lengkap karya yang pernah saya kerjakan — dari antarmuka
-          frontend hingga aplikasi fullstack. Klik untuk melihat detail,
-          teknologi, dan hasilnya.
-        </p>
-      </div>
-
-      <section className="mt-10" aria-label="Daftar proyek">
-        <ProjectsGrid projects={projects} />
-      </section>
+      <ProjectsHeader />
     </>
   )
 }

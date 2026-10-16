@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from "react"
 import { processSteps } from "@/src/process"
+import { processDescEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { ScrollMarqueeRows } from "@/src/components/scroll-marquee-rows"
 
 export function ProcessSection() {
   const ref = useRef<HTMLElement>(null)
+  const { lang, t } = useLang()
 
   useEffect(() => {
     const root = ref.current
@@ -40,13 +42,13 @@ export function ProcessSection() {
       className="process"
       ref={ref}
     >
-      <ScrollMarqueeRows rows={["DESIGN PROCESS", "STEPS I FOLLOW"]} />
+      <ScrollMarqueeRows rows={[t.process.rows[0], t.process.rows[1]]} />
 
       <div className="container process-front">
         <div className="process-reveal process-head">
-          <Tagline className="process-label">Process</Tagline>
+          <Tagline className="process-label">{t.process.tagline}</Tagline>
           <h2 id="process-heading" className="process-title">
-            How I Work
+            {t.process.title}
           </h2>
         </div>
 
@@ -66,7 +68,11 @@ export function ProcessSection() {
                 <div className="process-card__body">
                   <p className="process-number">{step.number}</p>
                   <h3 className="process-card__title">{step.title}</h3>
-                  <p className="process-card__desc">{step.description}</p>
+                  <p className="process-card__desc">
+                    {lang === "en"
+                      ? (processDescEn[step.slug] ?? step.description)
+                      : step.description}
+                  </p>
                 </div>
               </article>
             )

@@ -3,12 +3,14 @@
 import { useEffect } from "react"
 import Image from "next/image"
 import { experience, initialsOf } from "@/src/experience"
+import { expBulletsEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 
 export function ExperienceSection() {
   const ref = useRevealGroup<HTMLElement>()
+  const { lang, t } = useLang()
 
   // Gradien garis timeline mengikuti progress scroll di dalam section.
   useEffect(() => {
@@ -54,13 +56,12 @@ export function ExperienceSection() {
     >
       <div className="container exp__grid">
         <div className="exp__intro exp-reveal" data-reveal>
-          <Tagline className="about-label">Work History</Tagline>
+          <Tagline className="about-label">{t.experience.tagline}</Tagline>
           <h2 id="experience-heading" className="exp-title">
-            Experience
+            {t.experience.title}
           </h2>
           <p className="exp-subtitle">
-            Perjalanan profesional dan peran-peran utama saya di industri
-            teknologi.
+            {t.experience.subtitle}
           </p>
         </div>
 
@@ -119,7 +120,10 @@ export function ExperienceSection() {
                     </div>
 
                     <ul className="exp-item__bullets">
-                      {item.bullets.map((bullet) => (
+                      {(lang === "en"
+                        ? (expBulletsEn[item.slug] ?? item.bullets)
+                        : item.bullets
+                      ).map((bullet) => (
                         <li key={bullet}>{bullet}</li>
                       ))}
                     </ul>
