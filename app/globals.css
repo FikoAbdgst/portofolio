@@ -2250,60 +2250,140 @@ html.has-smooth-scroll {
   .exp__intro {
     position: static;
     max-width: none;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     padding-top: 0;
   }
 
+  .exp-title {
+    font-size: clamp(26px, 7vw, 32px);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .exp-subtitle {
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 38ch;
+  }
+
   .exp-timeline {
-    --exp-list-pad: 36px;
-    --exp-list-gap: 32px;
-    --exp-pad-top: 18px;
-    --exp-pad-x: 18px;
-    --exp-pad-bottom: 28px;
+    --exp-list-pad: 28px;
+    --exp-list-gap: 20px;
+    --exp-pad-top: 16px;
+    --exp-pad-x: 16px;
+    --exp-pad-bottom: 20px;
   }
 
   .exp-timeline__line,
   .exp-timeline__fill {
-    left: 8px;
+    left: 7px;
   }
 
+  .exp-item__node {
+    top: 22px;
+    left: calc(var(--exp-list-pad) * -1 + 0px);
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 0 0 4px #070d20;
+  }
+
+  /* Di sentuh (tanpa hover) kartu butuh batas + isi yang terlihat. */
   .exp-item__card {
     margin: 0;
-    border-radius: 16px;
+    min-width: 0;
+    border-radius: 20px;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
   }
 
+  /* Susunan vertikal alami: judul -> perusahaan -> periode -> lokasi. */
   .exp-item__head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 0;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    min-width: 0;
   }
 
-  .exp-item__lead,
+  .exp-item__lead {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   .exp-item__meta {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+    margin-top: 12px;
   }
 
   .exp-item__title {
-    grid-row: 1;
-  }
-
-  .exp-item__period {
-    grid-row: 2;
-    justify-self: start;
-    margin-top: 10px;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    overflow-wrap: break-word;
   }
 
   .exp-item__org {
-    grid-row: 3;
-    margin-top: 10px;
+    margin-top: 12px;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .exp-item__logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+
+  .exp-item__company {
+    font-size: 15px;
+    line-height: 1.45;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .exp-item__period {
+    height: auto;
+    min-height: 30px;
+    max-width: 100%;
+    padding: 6px 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
   .exp-item__location {
-    display: block;
-    grid-row: 4;
-    margin-top: 6px;
-    white-space: normal;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #7d8aa5;
+    overflow-wrap: break-word;
+  }
+
+  .exp-item__bullets {
+    margin-top: 14px;
+    gap: 8px;
+  }
+
+  .exp-item__bullets li {
+    padding-left: 20px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    overflow-wrap: break-word;
+  }
+
+  .exp-item__bullets li::before {
+    top: 9px;
   }
 }
 
@@ -4042,6 +4122,24 @@ body {
 
   .hero-socials {
     gap: 8px 14px;
+  }
+
+  .exp-timeline {
+    --exp-list-pad: 24px;
+    --exp-list-gap: 16px;
+    --exp-pad-x: 14px;
+  }
+
+  .exp-item__title {
+    font-size: 20px;
+  }
+
+  .exp-item__company {
+    font-size: 14px;
+  }
+
+  .exp-item__bullets li {
+    font-size: 14px;
   }
 }
 
