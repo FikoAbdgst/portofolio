@@ -1,51 +1,20 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { experience, initialsOf } from "@/src/experience"
 import { expBulletsEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
-
 export function ExperienceSection() {
   const ref = useRevealGroup<HTMLElement>()
   const { lang, t } = useLang()
+  // Accordion eksklusif: hanya satu entri terbuka. Item terbaru terbuka awal.
+  const [open, setOpen] = useState<string>(experience[0]?.slug ?? "")
 
-  // Gradien garis timeline mengikuti progress scroll di dalam section.
-  useEffect(() => {
-    const root = ref.current
-    if (!root) return
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-
-    let ticking = false
-    const update = () => {
-      ticking = false
-      const rect = root.getBoundingClientRect()
-      if (rect.height === 0) return
-      const passed = Math.min(
-        Math.max(window.innerHeight * 0.5 - rect.top, 0),
-        rect.height,
-      )
-      root.style.setProperty(
-        "--exp-progress",
-        `${Math.round((passed / rect.height) * 100)}%`,
-      )
-    }
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll)
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-    }
-  }, [ref])
+  const toggle = (slug: string) =>
+    setOpen((current) => (current === slug ? "" : slug))
 
   return (
     <section
@@ -60,78 +29,92 @@ export function ExperienceSection() {
           <h2 id="experience-heading" className="exp-title">
             {t.experience.title}
           </h2>
-          <p className="exp-subtitle">
-            {t.experience.subtitle}
-          </p>
+          <p className="exp-subtitle">{t.experience.subtitle}</p>
         </div>
 
-        <div className="exp-timeline">
-          <span aria-hidden="true" className="exp-timeline__line" />
-          <span aria-hidden="true" className="exp-timeline__fill" />
+        <ul className="exp-list">
+          {experience.map((item, i) => {
+            const isOpen = open === item.slug
+            const triggerId = `exp-trigger-${item.slug}`
+            const panelId = `exp-panel-${item.slug}`
+            const bullets =
+              lang === "en" ? (expBulletsEn[item.slug] ?? item.bullets) : item.bullets
 
-          <ol className="exp-timeline__list">
-            {experience.map((item, i) => (
+            return (
               <li
                 key={item.slug}
-                className="exp-item exp-reveal"
+                className="exp-row exp-reveal"
                 data-reveal
+                data-open={isOpen}
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
-                  <span aria-hidden="true" className="exp-item__node" />
+                <h3 className="exp-row__heading">
+                  <button
+                    type="button"
+                    id={triggerId}
+                    className="exp-row__trigger"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => toggle(item.slug)}
+                  >
+                    <span className="exp-row__mark" aria-hidden="true">
+                      {item.logo ? (
+                        <Image src={item.logo} alt="" width={56} height={56} />
+                      ) : (
+                        initialsOf(item.company)
+                      )}
+                    </span>
 
-                  <div className="exp-item__card">
-                    <div className="exp-item__head">
-                      <div className="exp-item__lead">
-                        <h3 className="exp-item__title">{item.role}</h3>
+                    <span className="exp-row__main">
+                      <span className="exp-row__role">
+                        {item.current && (
+                          <span
+                            className="status-dot exp-row__live"
+                            aria-hidden="true"
+                          />
+                        )}
+                        {item.role}
+                      </span>
+                      <span className="exp-row__company">{item.company}</span>
+                    </span>
 
-                        <div className="exp-item__org">
-                          <span className="exp-item__logo" aria-hidden="true">
-                            {item.logo ? (
-                              <Image
-                                src={item.logo}
-                                alt=""
-                                width={56}
-                                height={56}
-                              />
-                            ) : (
-                              initialsOf(item.company)
-                            )}
-                          </span>
-                          <span className="exp-item__company">
-                            {item.company}
-                          </span>
-                        </div>
-                      </div>
+                    <span className="exp-row__period">{item.period}</span>
 
-                      <div className="exp-item__meta">
-                        <span className="exp-item__period">
-                          {item.current && (
-                            <span
-                              className="status-dot exp-item__live"
-                              aria-hidden="true"
-                            />
-                          )}
-                          {item.period}
-                        </span>
-                        <span className="exp-item__location">
-                          {item.location}
-                        </span>
-                      </div>
-                    </div>
+                    <span className="exp-row__icon" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      >
+                        <path d="M8 2.5v11M2.5 8h11" />
+                      </svg>
+                    </span>
+                  </button>
+                </h3>
 
-                    <ul className="exp-item__bullets">
-                      {(lang === "en"
-                        ? (expBulletsEn[item.slug] ?? item.bullets)
-                        : item.bullets
-                      ).map((bullet) => (
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={triggerId}
+                  className="exp-row__panel"
+                >
+                  <div className="exp-row__panel-inner">
+                    <p className="exp-row__location">{item.location}</p>
+                    <ul className="exp-row__bullets">
+                      {bullets.map((bullet) => (
                         <li key={bullet}>{bullet}</li>
                       ))}
                     </ul>
                   </div>
-                </li>
-            ))}
-          </ol>
-        </div>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </section>
   )

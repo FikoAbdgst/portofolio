@@ -191,7 +191,17 @@ export function Hero() {
       <div className="container relative z-10 flex flex-1 flex-col justify-center px-5 pb-10 pt-28 md:px-6 md:pb-14 md:pt-40">
         <div className="hero-top flex flex-wrap items-start justify-between gap-6">
           <p
-            className="fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
+            className="hero-status fade-up"
+            style={{ animationDelay: "0.45s" }}
+          >
+            <span
+              className="status-dot inline-block align-middle"
+              aria-hidden="true"
+            />
+            {t.hero.available}
+          </p>
+          <p
+            className="hero-intro fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
             style={{ color: "#c9d4e3", animationDelay: "0.55s" }}
           >
             {t.hero.intro}
@@ -212,7 +222,7 @@ export function Hero() {
               />
               {t.hero.available}
             </p>
-            <p ref={scrollRef} className="tracking-[0.3em] uppercase">
+            <p ref={scrollRef} className="hero-scroll-hint tracking-[0.3em] uppercase">
               {t.hero.scroll}
               <span
                 aria-hidden="true"
@@ -228,14 +238,19 @@ export function Hero() {
           aria-label={displayName}
           className="giant-name giant-name--full mt-10"
         >
-          {displayName.split("").map((ch, i) => (
-            <span key={i} aria-hidden="true" className="giant-mask">
-              <span
-                className="giant-letter"
-                style={{ animationDelay: `${i * 40}ms` }}
-              >
-                {ch === " " ? " " : ch}
-              </span>
+          {displayName.split(" ").map((word, wi, arr) => (
+            <span key={wi} className="giant-word" aria-hidden="true">
+              {word.split("").map((ch, i) => (
+                <span key={i} className="giant-mask">
+                  <span
+                    className="giant-letter"
+                    style={{ animationDelay: `${(wi * 8 + i) * 40}ms` }}
+                  >
+                    {ch}
+                  </span>
+                </span>
+              ))}
+              {wi < arr.length - 1 ? " " : null}
             </span>
           ))}
         </h1>
