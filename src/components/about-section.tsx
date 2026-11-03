@@ -7,7 +7,6 @@ import { FaLinkedin } from "react-icons/fa"
 import { siteConfig } from "@/src/site.config"
 import { useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
-import { TechMarquee } from "@/src/components/tech-marquee"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
 const PROFILE_IMAGE = "/img/profile.jpg"
@@ -92,7 +91,6 @@ export function AboutSection() {
       className="about"
       ref={ref}
     >
-      <TechMarquee />
       <div className="container about__grid">
         <div className="about__media about-reveal" data-reveal>
           <div

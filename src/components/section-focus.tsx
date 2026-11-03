@@ -13,8 +13,7 @@ export function SectionFocus() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const root = document.querySelector(".landing-content")
     if (!root) return
-    // Semua section kecuali yang bersarang (stack/tech marquee sudah
-    // menyatu di dalam #about, jadi fokus about mencakup keduanya).
+    // Marquee stack nested di hero, jadi tetap tajam saat hero sedang fokus.
     const sections = (Array.from(
       root.querySelectorAll("section"),
     ) as HTMLElement[]).filter((el) => !el.parentElement?.closest("section"))

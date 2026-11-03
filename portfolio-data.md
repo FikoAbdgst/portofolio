@@ -95,11 +95,10 @@ Full-Stack Developer lulusan D3 Teknik Informatika dengan pengalaman mengerjakan
 - Institusi: STMIK Mardira Indonesia
 - Jenjang: Diploma 3 (D3), Teknik Informatika
 - Periode: Aug 2023 - Aug 2026
-- GPA: 3.7 (skala 4.00)
+- GPA: 3.82 (skala 4.00)
 - Logo: - (opsional: /img/education/stmik-mardira.png)
 - Poin:
   - Mempelajari Pemrograman Web, Internet of Things, Struktur Data, Algoritma dan Pemrograman, Analisis Sistem Informasi, Pemrograman Android, dan Pemrograman Python.
-  - Anggota Himpunan Mahasiswa D3 (HIMA).
   - Anggota Unit Kegiatan Mahasiswa Creative Student Association (CSA), berfokus pada pengembangan keterampilan coding, inovasi teknologi, dan kolaborasi proyek kreatif di bidang IT.
 
 ### 4.2 Sertifikasi

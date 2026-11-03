@@ -1,80 +1,41 @@
 "use client"
 
 import Image from "next/image"
-import { FaAward, FaCalendarAlt } from "react-icons/fa"
-import {
-  certifications,
-  education,
-  type EducationEntry,
-} from "@/src/education"
+import { FaAward, FaBookOpen, FaCalendarAlt, FaUsers } from "react-icons/fa"
+import { education } from "@/src/education"
 import { eduDegreeEn, eduHighlightsEn, useLang } from "@/src/i18n"
 import { Tagline } from "@/src/components/ui/Tagline"
 import { useRevealGroup } from "@/src/components/use-reveal-group"
 
-export function EducationCard({
-  entry,
-  delay,
-  lang,
-}: {
-  entry: EducationEntry
-  delay: number
-  lang: "id" | "en"
-}) {
-  return (
-    <article
-      data-cursor-hover
-      data-reveal
-      className="edu-card edu-reveal"
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      <span aria-hidden="true" className="edu-logo">
-        {entry.logo ? (
-          <Image
-            src={entry.logo}
-            alt=""
-            width={120}
-            height={120}
-            className="edu-logo__img"
-          />
-        ) : (
-          <span className="edu-logo__initials">{entry.initials}</span>
-        )}
-      </span>
-
-      <div className="edu-main">
-        <div className="edu-top">
-          <h3 className="edu-school">{entry.institution}</h3>
-          <div className="edu-pills">
-            <span className="edu-pill">
-              <FaCalendarAlt aria-hidden="true" className="edu-pill__icon" />
-              {entry.period}
-            </span>
-            <span className="edu-pill">
-              <FaAward aria-hidden="true" className="edu-pill__icon" />
-              <strong className="edu-pill__strong">{entry.gpa}</strong>
-            </span>
-          </div>
-        </div>
-
-        <p className="edu-degree">
-          {lang === "en" ? eduDegreeEn : entry.degree}
-        </p>
-        <div aria-hidden="true" className="edu-divider" />
-        <ul className="edu-highlights">
-          {(lang === "en" ? eduHighlightsEn : entry.highlights).map(
-            (highlight) => (
-              <li key={highlight}>{highlight}</li>
-            ),
-          )}
-        </ul>
-      </div>
-    </article>
-  )
-}
-
 export function EducationSection() {
   const ref = useRevealGroup<HTMLElement>()
   const { lang, t } = useLang()
+  const entry = education[0]
+
+  if (!entry) return null
+
+  const highlights = lang === "en" ? eduHighlightsEn : entry.highlights
+  const degree = lang === "en" ? eduDegreeEn : entry.degree
+
+  // Dua bagian isi, keduanya selalu terbaca — tanpa tab yang menyembunyikan teks.
+  const parts = [
+    {
+      id: "coursework",
+      index: "01",
+      icon: FaBookOpen,
+      kicker: t.education.topicKickers.coursework,
+      title: t.education.topics.coursework,
+      body: highlights[0] ?? "",
+    },
+    {
+      id: "organization",
+      index: "02",
+      icon: FaUsers,
+      kicker: t.education.topicKickers.organization,
+      title: t.education.topics.organization,
+      body: highlights[1] ?? "",
+    },
+  ]
 
   return (
     <section
@@ -89,54 +50,81 @@ export function EducationSection() {
           <h2 id="education-heading" className="edu-title">
             {t.education.title}
           </h2>
-          <p className="edu-subtitle">
-            {t.education.subtitle}
-          </p>
+          <p className="edu-subtitle">{t.education.subtitle}</p>
         </div>
 
-        <div className="edu-card-wrap">
-          {education.map((entry) => (
-            <EducationCard
-              key={entry.slug}
-              entry={entry}
-              delay={80}
-              lang={lang}
-            />
-          ))}
-        </div>
+        <article data-reveal className="edu-record edu-reveal">
+          <span aria-hidden="true" className="edu-record__glow" />
+          <span aria-hidden="true" className="edu-record__watermark">
+            {entry.initials}
+          </span>
 
-        <div
-          data-reveal
-          className="edu-head edu-reveal"
-          style={{ marginTop: "64px" }}
-        >
-          <Tagline className="edu-label">{t.education.certTagline}</Tagline>
-          <h3 className="edu-title" style={{ fontSize: "clamp(24px, 2.6vw, 32px)" }}>
-            {t.education.certTitle}
-          </h3>
-        </div>
+          <div className="edu-record__grid">
+            <div className="edu-record__id">
+              <span aria-hidden="true" className="edu-logo">
+                {entry.logo ? (
+                  <Image
+                    src={entry.logo}
+                    alt=""
+                    width={120}
+                    height={120}
+                    className="edu-logo__img"
+                  />
+                ) : (
+                  <span className="edu-logo__initials">{entry.initials}</span>
+                )}
+              </span>
 
-        <ul className="edu-certs">
-          {certifications.map((cert, index) => (
-            <li
-              key={cert.slug}
-              data-reveal
-              className="edu-reveal edu-cert"
-              style={{ transitionDelay: `${index * 80}ms` }}
-            >
-              <div className="edu-cert__text">
-                <p className="edu-cert__name">{cert.name}</p>
-                <p className="edu-cert__issuer">
-                  {cert.issuer}
-                  {cert.credentialId
-                    ? ` · Credential ID: ${cert.credentialId}`
-                    : ""}
-                </p>
-              </div>
-              <span className="edu-cert__date">{cert.period}</span>
-            </li>
-          ))}
-        </ul>
+              <p className="edu-record__kicker">{t.education.campusLabel}</p>
+              <h3 className="edu-record__school">{entry.institution}</h3>
+              <p className="edu-record__degree">{degree}</p>
+
+              <dl className="edu-record__facts">
+                <div className="edu-fact">
+                  <dt>
+                    <FaCalendarAlt aria-hidden="true" />
+                    {t.education.topics.period}
+                  </dt>
+                  <dd>{entry.period}</dd>
+                </div>
+                <div className="edu-fact">
+                  <dt>
+                    <FaAward aria-hidden="true" />
+                    {t.education.gpaLabel}
+                  </dt>
+                  <dd>{entry.gpa}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="edu-record__parts">
+              {parts.map((part) => {
+                const Icon = part.icon
+                return (
+                  <section
+                    key={part.id}
+                    className="edu-part"
+                    aria-labelledby={`edu-part-${part.id}`}
+                  >
+                    <span aria-hidden="true" className="edu-part__icon">
+                      <Icon />
+                    </span>
+                    <div className="edu-part__copy">
+                      <p className="edu-part__kicker">{part.kicker}</p>
+                      <h4
+                        id={`edu-part-${part.id}`}
+                        className="edu-part__title"
+                      >
+                        {part.title}
+                      </h4>
+                      <p className="edu-part__text">{part.body}</p>
+                    </div>
+                  </section>
+                )
+              })}
+            </div>
+          </div>
+        </article>
       </div>
     </section>
   )

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 
-/** Lantai waktu: angka tidak boleh merayap terlalu singkat. */
+/** Lantai waktu: logo tidak boleh selesai terlalu cepat. */
 const MIN_MS = 700
 /** Batas keras: font yang menggantung tidak boleh memblokir situs. */
 const MAX_MS = 3000
@@ -10,21 +10,24 @@ const MAX_MS = 3000
 const RAMP_MS = 1400
 /** Tween terakhir ke 100: melambat, bukan merambat ke asymptotically. */
 const FINAL_MS = 520
-/** Jeda di angka 100 sebelum halaman dibuka. */
-const HOLD_MS = 850
-/** Lama plate lift (harus sinkron dengan CSS .preloader). */
+/** Jeda di logo penuh sebelum mulai keluar. */
+const HOLD_MS = 380
+/** Logo naik + memudar lebih dulu. */
+const FADE_MS = 440
+/** Baru setelah logo selesai memudar, plate layar terangkat membuka halaman. */
+const EXIT_DELAY_MS = FADE_MS + 20
+/** Lama plate lift (sinkron dengan CSS .preloader[data-state="exit"]). */
 const EXIT_MS = 900
 
 /**
- * Plate pembuka: satu angka 000→100 di tengah yang mengikuti kesiapan
- * sungguhan (font + event load), ditahan sebentar di 100, lalu plate terangkat
- * membuka halaman pada posisi teratas. Plate di-render di server supaya
- * langsung tampil tanpa flash; ada failsafe CSS bila JS tidak pernah jalan.
+ * Plate pembuka: hanya sparkle ✦ yang berdenyut seperti ikon tagline.
+ * Terangnya mengikuti kesiapan sungguhan (font + event load), jadi bintang
+ * itu sendiri yang berperan sebagai loading. Saat siap, logo memudar ke atas
+ * lebih dulu, baru layar bergeser membuka halaman sepersekian detik kemudian.
+ * Di-render di server supaya langsung tampil tanpa flash; ada failsafe CSS.
  */
 export function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null)
-  const countRef = useRef<HTMLSpanElement>(null)
-  const fillRef = useRef<HTMLSpanElement>(null)
   const [gone, setGone] = useState(false)
 
   useEffect(() => {
@@ -60,21 +63,34 @@ export function Preloader() {
     let readyAt = 0
     let readyFrom = 0
     let finished = false
+    const timers: number[] = []
 
     const finish = () => {
       if (finished) return
       finished = true
       cancelAnimationFrame(raf)
       window.removeEventListener("load", onLoad)
-      doc.classList.remove("is-preloading")
-      doc.classList.add("is-ready")
-      // Beri tahu hero: counter 0→100 selesai + plate mulai terangkat,
-      // animasi hero boleh jalan sekarang.
-      window.dispatchEvent(new CustomEvent("preloader:done"))
-      // Apa pun yang bergeser selama load, halaman tetap terbuka di atas.
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
       root.dataset.state = "done"
-      window.setTimeout(() => setGone(true), EXIT_MS + 40)
+
+      // Logo sudah naik & memudar; baru plate layar mengikuti.
+      timers.push(
+        window.setTimeout(() => {
+          root.dataset.state = "exit"
+          doc.classList.remove("is-preloading")
+          doc.classList.add("is-ready")
+          // Beri tahu hero: plate terangkat, animasi hero boleh jalan.
+          window.dispatchEvent(new CustomEvent("preloader:done"))
+          // Apa pun yang bergeser selama load, halaman tetap terbuka di atas.
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant" as ScrollBehavior,
+          })
+        }, EXIT_DELAY_MS),
+      )
+      timers.push(
+        window.setTimeout(() => setGone(true), EXIT_DELAY_MS + EXIT_MS + 40),
+      )
     }
 
     const tick = (now: number) => {
@@ -106,16 +122,11 @@ export function Preloader() {
       const value = Math.min(100, Math.round(shown))
       if (value !== printed) {
         printed = value
-        if (countRef.current) {
-          countRef.current.textContent = String(value).padStart(3, "0")
-        }
-        if (fillRef.current) {
-          fillRef.current.style.width = `${value}%`
-        }
+        root.style.setProperty("--load", String(value / 100))
         if (value === 100) root.dataset.phase = "ready"
       }
 
-      // Jeda di 100 dulu, baru lift.
+      // Tahan sebentar di logo penuh, baru keluar.
       if (ready && now - readyAt >= FINAL_MS + HOLD_MS) finish()
       else raf = requestAnimationFrame(tick)
     }
@@ -123,6 +134,7 @@ export function Preloader() {
     raf = requestAnimationFrame(tick)
     return () => {
       cancelAnimationFrame(raf)
+      timers.forEach((id) => window.clearTimeout(id))
       window.removeEventListener("load", onLoad)
       doc.classList.remove("is-preloading")
     }
@@ -134,12 +146,11 @@ export function Preloader() {
     <div ref={rootRef} className="preloader" aria-hidden="true">
       <div className="page-grain preloader__grain" />
       <div className="preloader__stack">
-        <span ref={countRef} className="preloader__count">
-          000
+        <span className="preloader__logo">
+          <span aria-hidden="true" className="preloader__glyph">
+            ✦
+          </span>
         </span>
-      </div>
-      <div className="preloader__bar">
-        <span ref={fillRef} className="preloader__fill" />
       </div>
     </div>
   )

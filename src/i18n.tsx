@@ -47,16 +47,31 @@ const ui = {
     experience: {
       tagline: "Riwayat Kerja",
       title: "Pengalaman",
-      subtitle:
-        "Perjalanan profesional dan peran-peran utama saya di industri teknologi.",
+      subtitle: "Peran dan kontribusi saya di industri teknologi.",
     },
     education: {
       tagline: "Latar Akademik",
       title: "Pendidikan",
       subtitle:
         "Fondasi pengetahuan dan pengalaman akademik yang membentuk perjalanan profesional saya.",
-      certTagline: "Sertifikasi",
-      certTitle: "Sertifikasi",
+      campusLabel: "Kampus",
+      recordLabel: "Catatan Akademik",
+      gpaLabel: "IPK",
+      tabsLabel: "Detail pendidikan",
+      topics: {
+        degree: "Gelar",
+        coursework: "Mata Kuliah",
+        organization: "Organisasi",
+        period: "Periode",
+      },
+      topicKickers: {
+        degree: "Gelar akademik",
+        coursework: "Yang dipelajari",
+        organization: "Di luar kelas",
+        period: "Masa studi",
+      },
+      periodNote:
+        "Rentang masa studi di STMIK Mardira Indonesia, dari awal masuk sampai lulus.",
     },
     projects: {
       tagline: "Proyek Pilihan",
@@ -64,6 +79,7 @@ const ui = {
       desc: "Pilihan proyek yang saya rancang dan bangun.",
       viewAll: "Lihat semua proyek",
       viewLabel: "Lihat",
+      visit: "Buka situs",
       all: "Semua",
       filterLabel: "Filter proyek berdasarkan kategori",
       empty: "Belum ada proyek pada kategori ini.",
@@ -144,8 +160,24 @@ const ui = {
       title: "Education",
       subtitle:
         "The knowledge foundation and academic journey shaping my professional path.",
-      certTagline: "Certifications",
-      certTitle: "Certifications",
+      campusLabel: "Campus",
+      recordLabel: "Academic Record",
+      gpaLabel: "GPA",
+      tabsLabel: "Education details",
+      topics: {
+        degree: "Degree",
+        coursework: "Coursework",
+        organization: "Organization",
+        period: "Period",
+      },
+      topicKickers: {
+        degree: "Academic degree",
+        coursework: "What I studied",
+        organization: "Beyond the classroom",
+        period: "Study period",
+      },
+      periodNote:
+        "The study period at STMIK Mardira Indonesia, from enrollment to graduation.",
     },
     projects: {
       tagline: "Selected Projects",
@@ -153,6 +185,7 @@ const ui = {
       desc: "A curated selection of projects I've designed and built.",
       viewAll: "View all projects",
       viewLabel: "View",
+      visit: "Visit site",
       all: "All",
       filterLabel: "Filter projects by category",
       empty: "No projects in this category yet.",
@@ -239,26 +272,24 @@ export function useLang(): LangContextValue {
 /** Terjemahan Inggris untuk bullet pengalaman (kunci = slug). */
 export const expBulletsEn: Record<string, string[]> = {
   freelance: [
-    "Developed and delivered client-driven projects, from academic web apps to small and medium company websites.",
-    "Designed and integrated interfaces with React.js, Laravel, and Tailwind CSS — covering UI/UX design, database connections, and deployment.",
-    "Improved website performance by ±40% through code restructuring and responsive design.",
-    "Collaborated with clients to analyze requirements, propose the right technical solutions, and deliver projects on time with high quality standards.",
+    "Built web apps for clients—from academic assignments to small-business sites.",
+    "Shaped interfaces with React, Laravel, and Tailwind: UI/UX, database, and deployment.",
+    "Improved site performance by ±40% through cleaner code and responsive design.",
+    "Guided clients from requirements to on-time release.",
   ],
   csa: [
-    "Fully responsible for the technical implementation of a web-based e-rapor system for vocational schools, part of a community service (CSA) program.",
-    "Built responsive, intuitive interfaces with React and TypeScript, integrated with a Laravel backend (Inertia.js).",
-    "Designed and implemented the frontend architecture, and supported the Backend Developer in designing endpoints and the base database.",
+    "Built the e-report interface for vocational schools in a community service (CSA) program.",
+    "Developed responsive UI with React and TypeScript, integrated with a Laravel backend (Inertia.js).",
+    "Designed the frontend architecture and supported endpoint and database planning.",
   ],
   idsolusi: [
-    "Worked directly on the company's ongoing Enterprise Resource Planning (ERP) project.",
-    "Managed several ERP modules, mainly CRUD data management and transaction logic with Vue.js.",
-    "Learned professional folder structure standards and large-scale project architecture.",
-    "Handled frontend problem solving and coordinated with the backend team on data integration.",
+    "Worked on company ERP modules, mainly CRUD and transaction logic with Vue.js.",
+    "Studied professional folder structure and large-scale project architecture.",
+    "Solved frontend issues and coordinated with the backend team.",
   ],
   bara: [
-    "Analyzed user needs to design relevant and efficient software solutions.",
-    "Led web app development from ideation to implementation, covering system architecture, module integration, and testing.",
-    "Improved internal workflow efficiency by ±25% through structured system design and well-documented development processes.",
+    "Designed and built web apps from ideation to implementation.",
+    "Improved internal workflow efficiency by ±25% through a structured, documented system.",
   ],
 }
 

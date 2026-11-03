@@ -11,6 +11,7 @@ import Link from "next/link"
 import { siteConfig } from "@/src/site.config"
 import { useLang } from "@/src/i18n"
 import { HeroBottomBar } from "@/src/components/hero-bottom-bar"
+import { TechMarquee } from "@/src/components/tech-marquee"
 
 /** Spotlight lembut 600px mengikuti mouse dengan lerp ~0.08 (khusus hero). */
 function Spotlight() {
@@ -54,7 +55,11 @@ function Spotlight() {
     }
   }, [])
 
-  return <div aria-hidden="true" ref={ref} className="hero-spotlight" />
+  return (
+    <div aria-hidden="true" className="hero-spotlight-viewport">
+      <div ref={ref} className="hero-spotlight" />
+    </div>
+  )
 }
 
 /** Pembungkus magnetik: tertarik ke kursor dalam radius ~80px, maks 8px. */
@@ -187,76 +192,81 @@ export function Hero() {
       aria-label="Intro"
       className={`relative flex min-h-svh flex-col overflow-hidden${ready ? " hero-ready" : ""}`}
     >
-      <Spotlight />
-      <div className="container relative z-10 flex flex-1 flex-col justify-center px-5 pb-10 pt-28 md:px-6 md:pb-14 md:pt-40">
-        <div className="hero-top flex flex-wrap items-start justify-between gap-6">
-          <p
-            className="hero-status fade-up"
-            style={{ animationDelay: "0.45s" }}
-          >
-            <span
-              className="status-dot inline-block align-middle"
-              aria-hidden="true"
-            />
-            {t.hero.available}
-          </p>
-          <p
-            className="hero-intro fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
-            style={{ color: "#c9d4e3", animationDelay: "0.55s" }}
-          >
-            {t.hero.intro}
-          </p>
-
-          <div
-            className="hero-meta fade-up text-right font-[family-name:var(--font-sans)] text-sm leading-7"
-            style={{
-              color: "rgba(201, 212, 227, 0.65)",
-              animationDelay: "0.7s",
-            }}
-          >
-            <p>{t.hero.role}</p>
-            <p>
+      <div className="hero-main relative flex flex-1 flex-col">
+        <Spotlight />
+        <div className="container relative z-10 flex flex-1 flex-col justify-center px-5 pb-10 pt-28 md:px-6 md:pb-14 md:pt-40">
+          <div className="hero-top flex flex-wrap items-start justify-between gap-6">
+            <p
+              className="hero-status fade-up"
+              style={{ animationDelay: "0.45s" }}
+            >
               <span
-                className="status-dot mr-2 inline-block align-middle"
+                className="status-dot inline-block align-middle"
                 aria-hidden="true"
               />
               {t.hero.available}
             </p>
-            <p ref={scrollRef} className="hero-scroll-hint tracking-[0.3em] uppercase">
-              {t.hero.scroll}
-              <span
-                aria-hidden="true"
-                className="scroll-line ml-3 inline-block h-px w-10 translate-y-[-4px] bg-current"
-              />
+            <p
+              className="hero-intro fade-up max-w-xl font-[family-name:var(--font-sans)] text-base leading-relaxed md:text-lg"
+              style={{ color: "#c9d4e3", animationDelay: "0.55s" }}
+            >
+              {t.hero.intro}
             </p>
+
+            <div
+              className="hero-meta fade-up text-right font-[family-name:var(--font-sans)] text-sm leading-7"
+              style={{
+                color: "rgba(201, 212, 227, 0.65)",
+                animationDelay: "0.7s",
+              }}
+            >
+              <p>{t.hero.role}</p>
+              <p>
+                <span
+                  className="status-dot mr-2 inline-block align-middle"
+                  aria-hidden="true"
+                />
+                {t.hero.available}
+              </p>
+              <p
+                ref={scrollRef}
+                className="hero-scroll-hint tracking-[0.3em] uppercase"
+              >
+                {t.hero.scroll}
+                <span
+                  aria-hidden="true"
+                  className="scroll-line ml-3 inline-block h-px w-10 translate-y-[-4px] bg-current"
+                />
+              </p>
+            </div>
           </div>
-        </div>
 
-        <h1
-          ref={nameRef}
-          data-cursor-name
-          aria-label={displayName}
-          className="giant-name giant-name--full mt-10"
-        >
-          {displayName.split(" ").map((word, wi, arr) => (
-            <span key={wi} className="giant-word" aria-hidden="true">
-              {word.split("").map((ch, i) => (
-                <span key={i} className="giant-mask">
-                  <span
-                    className="giant-letter"
-                    style={{ animationDelay: `${(wi * 8 + i) * 40}ms` }}
-                  >
-                    {ch}
+          <h1
+            ref={nameRef}
+            data-cursor-name
+            aria-label={displayName}
+            className="giant-name giant-name--full mt-10"
+          >
+            {displayName.split(" ").map((word, wi, arr) => (
+              <span key={wi} className="giant-word" aria-hidden="true">
+                {word.split("").map((ch, i) => (
+                  <span key={i} className="giant-mask">
+                    <span
+                      className="giant-letter"
+                      style={{ animationDelay: `${(wi * 8 + i) * 40}ms` }}
+                    >
+                      {ch}
+                    </span>
                   </span>
-                </span>
-              ))}
-              {wi < arr.length - 1 ? " " : null}
-            </span>
-          ))}
-        </h1>
+                ))}
+                {wi < arr.length - 1 ? " " : null}
+              </span>
+            ))}
+          </h1>
+        </div>
+        <HeroBottomBar />
       </div>
-
-      <HeroBottomBar />
+      <TechMarquee />
     </section>
   )
 }
