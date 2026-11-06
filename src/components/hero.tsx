@@ -33,9 +33,20 @@ function Spotlight() {
     let raf = 0
 
     const loop = () => {
-      sx += (tx - sx) * 0.08
-      sy += (ty - sy) * 0.08
-      el.style.transform = `translate(${sx}px, ${sy}px)`
+      const dx = tx - sx
+      const dy = ty - sy
+      sx += dx * 0.08
+      sy += dy * 0.08
+      el.style.transform = `translate3d(${sx}px, ${sy}px, 0)`
+      // Sudah hampir sampai: snap, lalu istirahatkan rAF sampai mouse
+      // bergerak lagi. Spotlight tidak lagi berjalan diam-diam saat scroll.
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        sx = tx
+        sy = ty
+        el.style.transform = `translate3d(${sx}px, ${sy}px, 0)`
+        raf = 0
+        return
+      }
       raf = requestAnimationFrame(loop)
     }
 
@@ -44,11 +55,11 @@ function Spotlight() {
       // Koordinat relatif terhadap section hero.
       const rect = el.parentElement?.getBoundingClientRect()
       if (rect) ty = e.clientY - rect.top
+      if (!raf) raf = requestAnimationFrame(loop)
     }
 
-    el.style.transform = `translate(${sx}px, ${sy}px)`
+    el.style.transform = `translate3d(${sx}px, ${sy}px, 0)`
     window.addEventListener("pointermove", onMove, { passive: true })
-    raf = requestAnimationFrame(loop)
     return () => {
       window.removeEventListener("pointermove", onMove)
       cancelAnimationFrame(raf)
@@ -171,6 +182,9 @@ export function Hero() {
     const update = () => {
       ticking = false
       const y = window.scrollY
+      // Hero sudah jauh di atas layar: berhenti menulis transform/opacity
+      // supaya scroll di section lain tidak membayar animasi yang tak terlihat.
+      if (y > window.innerHeight * 1.4) return
       if (h1)
         h1.style.transform = `translate3d(0, ${(y * 0.15).toFixed(1)}px, 0)`
       if (hint) hint.style.opacity = String(Math.max(0, 1 - y / 80))

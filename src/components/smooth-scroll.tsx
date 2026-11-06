@@ -43,14 +43,21 @@ export function SmoothScroll() {
 
     let target = window.scrollY
     let current = window.scrollY
+    let maxY = 0
     let raf = 0
     let running = false
     let self = false
     let anchorRaf = 0
     let anchorOn = false
 
-    const maxScroll = () =>
-      Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+    // Tinggi dokumen dibaca sekali + saat konten berubah, bukan tiap wheel
+    // (membaca scrollHeight setelah menulis scroll memaksa layout).
+    const measure = () => {
+      maxY = Math.max(0, doc.scrollHeight - window.innerHeight)
+      if (target > maxY) target = maxY
+      if (current > maxY) current = maxY
+    }
+    measure()
 
     const loop = () => {
       const diff = target - current
@@ -93,7 +100,7 @@ export function SmoothScroll() {
       const to = Math.max(
         0,
         Math.min(
-          maxScroll(),
+          maxY,
           el.getBoundingClientRect().top + from - NAV_OFFSET,
         ),
       )
@@ -126,6 +133,8 @@ export function SmoothScroll() {
         (e.target as HTMLElement | null)?.closest?.("[data-native-scroll]")
       )
         return
+      let dy = e.deltaY
+      if (!dy) return
       e.preventDefault()
       stopAnchor()
       // Sinkron dulu bila posisi bergeser di luar kendali (scrollbar/Resize).
@@ -133,10 +142,9 @@ export function SmoothScroll() {
         target = window.scrollY
         current = window.scrollY
       }
-      let dy = e.deltaY
       if (e.deltaMode === 1) dy *= 16
       else if (e.deltaMode === 2) dy *= window.innerHeight
-      target = Math.min(maxScroll(), Math.max(0, target + dy * DAMPEN))
+      target = Math.min(maxY, Math.max(0, target + dy * DAMPEN))
       kick()
     }
 
@@ -162,13 +170,30 @@ export function SmoothScroll() {
       flyTo(el)
     }
 
+    const onResize = () => {
+      measure()
+      if (!running) {
+        target = window.scrollY
+        current = window.scrollY
+      }
+    }
+
+    let ro: ResizeObserver | null = null
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(measure)
+      ro.observe(document.body)
+    }
+
     window.addEventListener("wheel", onWheel, { passive: false })
     window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onResize)
     document.addEventListener("click", onClick)
     return () => {
       window.removeEventListener("wheel", onWheel)
       window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onResize)
       document.removeEventListener("click", onClick)
+      ro?.disconnect()
       doc.classList.remove("has-smooth-scroll")
       if (flyToElement === flyTo) flyToElement = null
       cancelAnimationFrame(raf)

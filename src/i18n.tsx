@@ -40,7 +40,7 @@ const ui = {
       tagline: "Tentang Saya",
       titleA: "Seorang full-stack developer &",
       titleB: "pembangun web yang cepat dan aksesibel.",
-      body: "Full-Stack Developer lulusan D3 Teknik Informatika dengan pengalaman mengerjakan proyek web nyata, mulai dari freelance, magang di perusahaan, hingga sistem ERP dan e-rapor. Terbiasa membangun aplikasi dengan React, Vue.js, Laravel, dan Node.js, serta merancang antarmuka responsif dan user-friendly dengan Tailwind CSS. Senang memecahkan masalah, dari debugging sampai meningkatkan performa aplikasi, dan terbuka untuk peluang di tim engineering yang inovatif.",
+      body: "Full-stack developer lulusan D3 Teknik Informatika yang terbiasa membangun aplikasi web nyata dengan React, Vue.js, Laravel, dan Node.js. Fokus pada antarmuka yang responsif, cepat, dan mudah dipakai.",
       study: "Teknik Informatika",
       cta: "Hubungi Saya",
     },
@@ -70,6 +70,15 @@ const ui = {
         organization: "Di luar kelas",
         period: "Masa studi",
       },
+      topicNotes: {
+        coursework: "Tujuh mata kuliah inti yang membentuk dasar teknis saya.",
+        organization: "Anggota UKM Creative Student Association (CSA).",
+      },
+      organizationFocus: [
+        "Keterampilan Coding",
+        "Inovasi Teknologi",
+        "Kolaborasi Proyek",
+      ],
       periodNote:
         "Rentang masa studi di STMIK Mardira Indonesia, dari awal masuk sampai lulus.",
     },
@@ -145,7 +154,7 @@ const ui = {
       tagline: "About Me",
       titleA: "A full-stack developer &",
       titleB: "builder of fast, accessible web.",
-      body: "A Full-Stack Developer with a Diploma in Informatics Engineering, experienced in real-world web projects — from freelance work and company internships to ERP and e-rapor systems. Comfortable building apps with React, Vue.js, Laravel, and Node.js, and crafting responsive, user-friendly interfaces with Tailwind CSS. I enjoy solving problems, from debugging to boosting app performance, and I'm open to opportunities in innovative engineering teams.",
+      body: "A full-stack developer with a Diploma in Informatics Engineering, building real-world web apps with React, Vue.js, Laravel, and Node.js. I focus on interfaces that are responsive, fast, and easy to use.",
       study: "Informatics Engineering",
       cta: "Contact Me",
     },
@@ -176,6 +185,15 @@ const ui = {
         organization: "Beyond the classroom",
         period: "Study period",
       },
+      topicNotes: {
+        coursework: "Seven core courses that shaped my technical foundation.",
+        organization: "Member of the Creative Student Association (CSA) student unit.",
+      },
+      organizationFocus: [
+        "Coding Skills",
+        "Tech Innovation",
+        "Project Collaboration",
+      ],
       periodNote:
         "The study period at STMIK Mardira Indonesia, from enrollment to graduation.",
     },
@@ -416,3 +434,24 @@ export const eduHighlightsEn: string[] = [
 ]
 
 export const eduDegreeEn = "Diploma 3 (D3) in Informatics Engineering"
+
+/** Mata kuliah inti — urutan sama di kedua bahasa agar ikon tetap sejajar. */
+export const eduCourses: string[] = [
+  "Pemrograman Web",
+  "Internet of Things",
+  "Struktur Data",
+  "Algoritma dan Pemrograman",
+  "Analisis Sistem Informasi",
+  "Pemrograman Android",
+  "Pemrograman Python",
+]
+
+export const eduCoursesEn: string[] = [
+  "Web Programming",
+  "Internet of Things",
+  "Data Structures",
+  "Algorithms and Programming",
+  "Information Systems Analysis",
+  "Android Programming",
+  "Python Programming",
+]

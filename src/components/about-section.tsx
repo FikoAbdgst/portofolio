@@ -20,8 +20,10 @@ export function AboutSection() {
   const rafRef = useRef<number>(0)
   const target = useRef({ rx: 0, ry: 0, gx: 50, gy: 50 })
   const current = useRef({ rx: 0, ry: 0, gx: 50, gy: 50 })
+  const startTilt = useRef<() => void>(() => {})
 
   // 3D tilt: lerp rotation + glare biar gerakannya buttery, bukan patah-patah.
+  // rAF hanya hidup saat tilt berubah, lalu berhenti setelah konvergen.
   useEffect(() => {
     const tilt = tiltRef.current
     const card = cardRef.current
@@ -30,29 +32,56 @@ export function AboutSection() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduceMotion) return
 
-    const render = () => {
+    const paint = () => {
       const c = current.current
-      const t = target.current
-      c.rx += (t.rx - c.rx) * 0.12
-      c.ry += (t.ry - c.ry) * 0.12
-      c.gx += (t.gx - c.gx) * 0.12
-      c.gy += (t.gy - c.gy) * 0.12
-
       card.style.transform =
         `rotateX(${c.rx.toFixed(2)}deg) rotateY(${c.ry.toFixed(2)}deg) translateZ(0)`
       card.style.setProperty("--mx", `${c.gx.toFixed(1)}%`)
       card.style.setProperty("--my", `${c.gy.toFixed(1)}%`)
       // Intensitas glare mengikuti jarak dari tengah.
-      const dist = Math.min(
-        1,
-        Math.hypot(t.rx, t.ry) / 14
-      )
+      const dist = Math.min(1, Math.hypot(c.rx, c.ry) / 14)
       card.style.setProperty("--glare", (0.25 + dist * 0.75).toFixed(2))
-
-      rafRef.current = requestAnimationFrame(render)
     }
-    rafRef.current = requestAnimationFrame(render)
-    return () => cancelAnimationFrame(rafRef.current)
+
+    const render = () => {
+      rafRef.current = 0
+      const c = current.current
+      const t = target.current
+      const drx = t.rx - c.rx
+      const dry = t.ry - c.ry
+      const dgx = t.gx - c.gx
+      const dgy = t.gy - c.gy
+      const settled =
+        Math.abs(drx) < 0.01 &&
+        Math.abs(dry) < 0.01 &&
+        Math.abs(dgx) < 0.01 &&
+        Math.abs(dgy) < 0.01
+
+      if (settled) {
+        c.rx = t.rx
+        c.ry = t.ry
+        c.gx = t.gx
+        c.gy = t.gy
+      } else {
+        c.rx += drx * 0.12
+        c.ry += dry * 0.12
+        c.gx += dgx * 0.12
+        c.gy += dgy * 0.12
+      }
+
+      paint()
+      if (!settled) rafRef.current = requestAnimationFrame(render)
+    }
+
+    startTilt.current = () => {
+      if (!rafRef.current) rafRef.current = requestAnimationFrame(render)
+    }
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+      startTilt.current = () => {}
+    }
   }, [])
 
   // Pakai anchor #contact; fallback mailto kalau section contact tidak ada.
@@ -77,11 +106,13 @@ export function AboutSection() {
       gy: (py + 0.5) * 100,
     }
     el.classList.add("is-tilting")
+    startTilt.current()
   }
 
   const onTiltLeave = () => {
     target.current = { rx: 0, ry: 0, gx: 50, gy: 50 }
     tiltRef.current?.classList.remove("is-tilting")
+    startTilt.current()
   }
 
   return (

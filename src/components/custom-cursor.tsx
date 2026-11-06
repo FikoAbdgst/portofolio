@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react"
 
-const HOVER_SELECTOR = "a, button, [role='button'], summary, input, textarea, select, label"
+const HOVER_SELECTOR =
+  "a, button, [role='button'], summary, input, textarea, select, label"
 const RING_BASE = 36
 const NAME_SIZE = 80
 
@@ -13,6 +14,9 @@ const NAME_SIZE = 80
  *   searah gerak saat bergerak cepat, lalu kembali bulat saat diam.
  * - Label konteks ("View"/"Open") terpisah dari rotasi agar tetap tegak.
  * - Ripple melingkar saat klik. Nonaktif di sentuh & reduced-motion.
+ *
+ * Loop rAF hanya hidup saat kursor benar-benar bergerak/berubah, lalu
+ * berhenti setelah semua easing konvergen supaya tidak membebani scroll.
  */
 export function CustomCursor() {
   const layerRef = useRef<HTMLDivElement>(null)
@@ -72,8 +76,13 @@ export function CustomCursor() {
       raf = 0
     }
 
+    const kick = () => {
+      if (!shown || raf) return
+      raf = requestAnimationFrame(loop)
+    }
+
     const loop = () => {
-      dot.style.transform = `translate(${x}px, ${y}px)`
+      raf = 0
 
       // Target lengket: 35% ke tengah elemen saat hover.
       let gx = x
@@ -83,8 +92,11 @@ export function CustomCursor() {
         gx = x + (r.left + r.width / 2 - x) * 0.35
         gy = y + (r.top + r.height / 2 - y) * 0.35
       }
-      rx += (gx - rx) * 0.18
-      ry += (gy - ry) * 0.18
+
+      const dx = gx - rx
+      const dy = gy - ry
+      rx += dx * 0.18
+      ry += dy * 0.18
 
       // Regang searah kecepatan, kembali bulat saat melambat.
       const vx = rx - px
@@ -93,21 +105,33 @@ export function CustomCursor() {
       px = rx
       py = ry
       const targetStretch = Math.min(speed * 0.02, 0.35)
-      stretch += (targetStretch - stretch) * 0.2
+      const dStretch = targetStretch - stretch
+      stretch += dStretch * 0.2
       if (speed > 1.5) {
         const targetAngle = (Math.atan2(vy, vx) * 180) / Math.PI
-        angle += ((((targetAngle - angle + 540) % 360) - 180) * 0.2)
+        angle += (((targetAngle - angle + 540) % 360) - 180) * 0.2
       }
 
       const base = mode === "name" ? NAME_SIZE / RING_BASE : mode === "link" ? 1.6 : 1
       const targetScale = base * (down ? 0.8 : 1)
-      scale += (targetScale - scale) * 0.18
+      const dScale = targetScale - scale
+      scale += dScale * 0.18
 
       const sx = scale * (1 + stretch)
       const sy = scale * (1 - stretch * 0.6)
       ring.style.transform = `translate(${rx}px, ${ry}px) rotate(${angle}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`
       label.style.transform = `translate(${rx}px, ${ry}px)`
-      raf = requestAnimationFrame(loop)
+
+      // Semua easing sudah hampir diam: snap lalu hentikan loop.
+      const settled =
+        Math.abs(dx) < 0.05 &&
+        Math.abs(dy) < 0.05 &&
+        Math.abs(dStretch) < 0.001 &&
+        Math.abs(dScale) < 0.001 &&
+        speed < 0.05
+      if (!settled || down) {
+        raf = requestAnimationFrame(loop)
+      }
     }
 
     const onMove = (e: PointerEvent) => {
@@ -120,6 +144,9 @@ export function CustomCursor() {
         px = x
         py = y
       }
+      // Dot mengikuti pointer secara instan; ring yang di-ease oleh loop.
+      dot.style.transform = `translate(${x}px, ${y}px)`
+
       const t = e.target as Element | null
       const overName = Boolean(t?.closest?.("[data-cursor-name]"))
       const link = t?.closest?.(HOVER_SELECTOR)
@@ -138,9 +165,7 @@ export function CustomCursor() {
         ring.classList.remove("is-name")
         const href = (link as HTMLAnchorElement).getAttribute("href") ?? ""
         const explicit = link.getAttribute("data-cursor-label")
-        setLabel(
-          explicit ?? (href.includes("/projects") ? "View" : "Open")
-        )
+        setLabel(explicit ?? (href.includes("/projects") ? "View" : "Open"))
       } else if (hoverable && !inNav) {
         mode = "link"
         sticky = hoverable
@@ -154,7 +179,7 @@ export function CustomCursor() {
         setLabel("")
       }
       show()
-      if (!raf) raf = requestAnimationFrame(loop)
+      kick()
     }
 
     const onDown = (e: PointerEvent) => {
@@ -163,20 +188,29 @@ export function CustomCursor() {
       ripple.classList.remove("go")
       void ripple.offsetWidth
       ripple.classList.add("go")
+      kick()
     }
     const onUp = () => {
       down = false
+      kick()
+    }
+
+    // Elemen sticky bisa bergeser karena scroll; ring perlu ikut menyesuaikan.
+    const onScroll = () => {
+      if (sticky) kick()
     }
 
     window.addEventListener("pointermove", onMove, { passive: true })
     window.addEventListener("pointerdown", onDown, { passive: true })
     window.addEventListener("pointerup", onUp, { passive: true })
+    window.addEventListener("scroll", onScroll, { passive: true })
     document.documentElement.addEventListener("pointerleave", hide)
 
     return () => {
       window.removeEventListener("pointermove", onMove)
       window.removeEventListener("pointerdown", onDown)
       window.removeEventListener("pointerup", onUp)
+      window.removeEventListener("scroll", onScroll)
       document.documentElement.removeEventListener("pointerleave", hide)
       hide()
     }

@@ -64,7 +64,7 @@ export function FeaturedProjects() {
   const { lang, t } = useLang()
 
   // Tumpukan kartu: satu kartu terangkat keluar tiap satu langkah scroll.
-  // Hanya transform/opacity yang ditulis, dan hanya saat deck di layar.
+  // Hanya transform yang ditulis, dan hanya saat deck di layar.
   useEffect(() => {
     const deck = deckRef.current
     if (!deck) return
@@ -78,11 +78,13 @@ export function FeaturedProjects() {
     let stageHeight = stage.offsetHeight
     let raf = 0
     let ticking = false
+    let near = false
 
     const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
 
     const apply = () => {
       ticking = false
+      if (!near) return
       const rect = deck.getBoundingClientRect()
       if (rect.bottom < 0 || rect.top > window.innerHeight) return
 
@@ -94,13 +96,12 @@ export function FeaturedProjects() {
       cards.forEach((card, index) => {
         const behind = Math.max(0, index - progress)
         const exit = clamp01(progress - index)
-        // Kartu yang keluar naik cepat lalu memudar lebih awal, supaya tidak
-        // menumpuk transparan di atas kartu berikutnya terlalu lama.
+        // Kartu yang keluar naik keluar dari stack. Tanpa fade: kartu tetap
+        // solid sampai benar-benar pergi, jadi scroll terasa lebih jernih.
         card.style.transform =
           `translate3d(0, calc(${(-exit * 130).toFixed(2)}% + ${(behind * 18).toFixed(2)}px), 0) ` +
           `scale(${(1 - behind * 0.04 - exit * 0.04).toFixed(3)}) ` +
           `rotate(${(-exit * 3).toFixed(2)}deg)`
-        card.style.opacity = (1 - Math.min(1, exit * 2.4)).toFixed(3)
       })
     }
 
@@ -115,10 +116,20 @@ export function FeaturedProjects() {
       onScroll()
     }
 
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        near = entry.isIntersecting
+        if (near) onScroll()
+      },
+      { rootMargin: "200px 0px" },
+    )
+    io.observe(deck)
+
     apply()
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onResize)
     return () => {
+      io.disconnect()
       cancelAnimationFrame(raf)
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onResize)

@@ -3,8 +3,9 @@
 import { useEffect } from "react"
 
 /**
- * Fokus section: section yang sedang menempati pita tengah viewport tetap
- * tajam, section lain diburamkan + diredupkan (class `is-dim`).
+ * Fokus section: section yang paling banyak terlihat tetap tajam, section lain
+ * diredupkan (class `is-dim`). Section panjang yang masih memenuhi layar
+ * (seperti deck proyek) tetap fokus sampai benar-benar pergi.
  * Hanya jalan di landing (`.landing-content`) dan nonaktif total saat
  * prefers-reduced-motion.
  */
@@ -22,17 +23,17 @@ export function SectionFocus() {
     let current: HTMLElement | null = null
 
     const pick = (): HTMLElement | null => {
-      const center = window.innerHeight / 2
+      const vh = window.innerHeight
       let best: HTMLElement | null = null
-      let bestDist = Infinity
+      let bestVisible = 0
       for (const el of sections) {
         const r = el.getBoundingClientRect()
-        // Hanya kandidat yang menyentuh pita tengah viewport.
-        if (r.bottom < window.innerHeight * 0.42) continue
-        if (r.top > window.innerHeight * 0.58) continue
-        const dist = Math.abs(r.top + r.height / 2 - center)
-        if (dist < bestDist) {
-          bestDist = dist
+        // Section terlihat paling banyak menang. Ini menjaga section panjang
+        // (mis. deck proyek yang sticky) tetap fokus selama masih di layar.
+        const visible =
+          Math.min(r.bottom, vh) - Math.max(r.top, 0)
+        if (visible > bestVisible) {
+          bestVisible = visible
           best = el
         }
       }
@@ -40,15 +41,14 @@ export function SectionFocus() {
     }
 
     const apply = () => {
-      const focused = pick()
-      if (focused === current) return
+      const focused = pick() ?? current
+      if (!focused || focused === current) return
       current = focused
       for (const el of sections) el.classList.toggle("is-dim", el !== focused)
     }
 
     const observer = new IntersectionObserver(apply, {
-      rootMargin: "-42% 0px -42% 0px",
-      threshold: [0, 0.25, 0.5, 0.75, 1],
+      threshold: [0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
     })
     sections.forEach((el) => observer.observe(el))
     apply()

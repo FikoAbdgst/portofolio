@@ -24,8 +24,10 @@ function ExperienceTimeline() {
     )
 
     let ticking = false
+    let near = false
     const update = () => {
       ticking = false
+      if (!near) return
       const rect = root.getBoundingClientRect()
       if (rect.height === 0) return
       // Jauh di luar layar: biarkan nilai terakhir, tidak perlu dihitung.
@@ -58,10 +60,20 @@ function ExperienceTimeline() {
       requestAnimationFrame(update)
     }
 
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        near = entry.isIntersecting
+        if (near) onScroll()
+      },
+      { rootMargin: "250px 0px" },
+    )
+    io.observe(root)
+
     update()
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll)
     return () => {
+      io.disconnect()
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
     }
